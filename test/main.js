@@ -82,8 +82,38 @@ describe('sinon-doublist-fs', function() {
   });
 
   describe('FileStub()', function() {
-    it('should use default stats', function(testDone) {
-      console.log('skipped: ' + this.test.title); testDone();
+    function assertDefaultsMatch(stats) {
+      stats.dev.should.equal(2114);
+      stats.ino.should.equal(48064969);
+      stats.mode.should.equal(33188);
+      stats.nlink.should.equal(1);
+      stats.uid.should.equal(85);
+      stats.gid.should.equal(100);
+      stats.rdev.should.equal(0);
+      stats.size.should.equal(527);
+      stats.blksize.should.equal(4096);
+      stats.blocks.should.equal(8);
+      var time = 'Mon, 10 Oct 2011 23:24:11 GMT';
+      stats.atime.should.equal(time);
+      stats.mtime.should.equal(time);
+      stats.ctime.should.equal(time);
+      stats.isFile().should.equal(true);
+      stats.isDirectory().should.equal(false);
+    }
+
+    it('should pass defaults to fs.statsSync', function(testDone) {
+      this.stubFile(this.names[0]).make();
+      assertDefaultsMatch(fs.statSync(this.names[0]));
+      testDone();
+    });
+
+    it('should pass defaults to fs.stats', function(testDone) {
+      this.stubFile(this.names[0]).make();
+      fs.stat(this.names[0], function(err, stats) {
+        should.equal(err, null);
+        assertDefaultsMatch(stats);
+        testDone();
+      });
     });
   });
 
@@ -129,7 +159,19 @@ describe('sinon-doublist-fs', function() {
   });
 
   describe('FileStub#readdir()', function() {
-    it('should stub stats.is*()', function(testDone) {
+    it('should set fs.readdir() contents when passed array', function(testDone) {
+      console.log('skipped: ' + this.test.title); testDone();
+    });
+
+    it('should set fs.readdirSync() contents when passed array', function(testDone) {
+      console.log('skipped: ' + this.test.title); testDone();
+    });
+
+    it('should stub stats.is*() when passed array', function(testDone) {
+      console.log('skipped: ' + this.test.title); testDone();
+    });
+
+    it('should stub stats.is*() when passed false', function(testDone) {
       console.log('skipped: ' + this.test.title); testDone();
     });
   });

@@ -10,12 +10,12 @@
 'use strict';
 
 var sinonDoublistFs = module.exports = function(fs, test) {
-  if (typeof test === 'string') {
+  if (is.string(test)) {
     globalInjector[test](fs);
     return;
   }
 
-  if (typeof fs.exists.restore === 'function') {
+  if (is.Function(fs.exists.restore)) {
     return;
   }
 
@@ -23,7 +23,10 @@ var sinonDoublistFs = module.exports = function(fs, test) {
     test[method] = bind(test, mixin[method]);
   });
 
+  test.fsStubOrig = fs;
   test.fsStub = test.stub(fs);
+
+  test.fsStub.Stats.restore();
 
   test.fsStub.exists.callsArgWith(1, false);
   test.fsStub.existsSync.returns(false);
@@ -44,11 +47,11 @@ var mixin = {};
 var fsStubMap = {};
 
 mixin.stubFile = function(name) {
-  if (typeof name !== 'string' || name.trim() === '') {
+  if (!is.string(name) || name.trim() === '') {
     throw new Error('invalid stubFile() name: ' + JSON.stringify(name));
   }
 
-  var fileStub = new FileStub(this.fsStub);
+  var fileStub = new FileStub(this.fsStubOrig, this.fsStub);
   return fileStub.set('name', name).set('sandbox', this);
 };
 
@@ -70,9 +73,10 @@ fsStubMap.writeFileSync = function(filename, data) {
 /**
  * An entry in the map of stubbed files.
  */
-function FileStub(fsStub) {
-  this.fsStub = fsStub;
+function FileStub(fs, fsStub) {
   this.settings = {
+    fs: fs,
+    fsStub: fsStub,
     sandbox: {},
     name: '',
     readdir: false, // Or array of paths.
@@ -97,11 +101,12 @@ function FileStub(fsStub) {
 configurable(FileStub.prototype);
 
 FileStub.prototype.buffer = function(buffer) {
-  if (typeof buffer === 'string') {
+  if (is.string(buffer)) {
     buffer = new Buffer(buffer);
   }
-  this.fsStub.readFileSync.withArgs(this.get('name')).returns(buffer);
-  this.fsStub.readFile.withArgs(this.get('name')).yields(null, buffer);
+  var fsStub = this.get('fsStub');
+  fsStub.readFileSync.withArgs(this.get('name')).returns(buffer);
+  fsStub.readFile.withArgs(this.get('name')).yields(null, buffer);
   return this;
 };
 
@@ -120,7 +125,7 @@ FileStub.prototype.readdir = function(files) {
 
 FileStub.prototype.stat = function(key, val) {
   var isMethods = [
-    'File', 'Directory', 'BlockDevice', 'CharacterDevice', 'FIFO', 'Socket'
+    'BlockDevice', 'CharacterDevice', 'FIFO', 'Socket'
   ];
   if (-1 === isMethods.indexOf('is' + key)) {
     // TODO set the return value of the is*() stub
@@ -138,8 +143,24 @@ FileStub.prototype.stat = function(key, val) {
 FileStub.prototype.make = function() {
   var name = this.get('name');
   fileMap[name] = this;
-  this.fsStub.exists.withArgs(name).yields(true);
-  this.fsStub.existsSync.withArgs(name).returns(true);
+
+  var fs = this.get('fs');
+  var fsStub = this.get('fsStub');
+  var stubMany = this.get('sandbox').stubMany;
+
+  fsStub.exists.withArgs(name).yields(true);
+  fsStub.existsSync.withArgs(name).returns(true);
+
+  var stats = this.get('stats');
+  var statsObj = new fs.Stats();
+  Object.keys(stats).forEach(function(key) {
+    statsObj[key] = stats[key];
+  });
+  var isDir = is.array(this.get('readdir'));
+  stubMany(statsObj, 'isDirectory').isDirectory.returns(isDir);
+  stubMany(statsObj, 'isFile').isFile.returns(!isDir);
+  fsStub.stat.withArgs(this.get('name')).yields(null, statsObj);
+  fsStub.statSync.withArgs(this.get('name')).returns(statsObj);
 };
 
 var globalInjector = {
