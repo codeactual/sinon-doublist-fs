@@ -15,7 +15,9 @@ describe('sinon-doublist-fs', function() {
   beforeEach(function(hookDone) {
     sinonDoublist(sinon, this);
     sinonDoublistFs(fs, this);
-    this.names = ['/foo'];
+    this.names = ['/foo', '/bar'];
+    this.strings = ['walking', 'dead'];
+    this.buffers = [new Buffer(this.strings[0]), new Buffer(this.strings[1])];
     hookDone();
   });
 
@@ -30,14 +32,14 @@ describe('sinon-doublist-fs', function() {
       var batch = new Batch();
 
       batch.push(function(taskDone) {
-        fs.exists(self.name, function(exists) {
+        fs.exists(self.names[0], function(exists) {
           should.equal(exists, false);
           taskDone();
         });
       });
       batch.end(function() {
-        self.stubFile(self.name).make();
-        fs.exists(self.name, function(exists) {
+        self.stubFile(self.names[0]).make();
+        fs.exists(self.names[0], function(exists) {
           should.equal(exists, true);
           testDone();
         });
@@ -59,25 +61,21 @@ describe('sinon-doublist-fs', function() {
   });
 
   describe('#writeFile()', function() {
-    it('should update fake file map', function(testDone) {
+    it('should update fake file map w/ string', function(testDone) {
+      console.log('skipped: ' + this.test.title); testDone();
+    });
+
+    it('should update fake file map w/ buffer', function(testDone) {
       console.log('skipped: ' + this.test.title); testDone();
     });
   });
 
   describe('#writeFileSync()', function() {
-    it('should update fake file map', function(testDone) {
+    it('should update fake file map w/ string', function(testDone) {
       console.log('skipped: ' + this.test.title); testDone();
     });
-  });
 
-  describe('#readFile()', function() {
-    it('should read fake file map', function(testDone) {
-      console.log('skipped: ' + this.test.title); testDone();
-    });
-  });
-
-  describe('#readFileSync()', function() {
-    it('should read fake file map', function(testDone) {
+    it('should update fake file map w/ buffer', function(testDone) {
       console.log('skipped: ' + this.test.title); testDone();
     });
   });
@@ -99,21 +97,34 @@ describe('sinon-doublist-fs', function() {
   });
 
   describe('FileStub#buffer()', function() {
-    it('should accept string', function(testDone) {
-      console.log('skipped: ' + this.test.title); testDone();
+    it('should set readFileSync output from string', function(testDone) {
+      this.stubFile(this.names[0])
+        .buffer(this.strings[0])
+        .make();
+      fs.readFileSync(this.names[0]).toString().should.equal(this.strings[0]);
+      testDone();
     });
 
-    it('should accept buffer', function(testDone) {
-      console.log('skipped: ' + this.test.title); testDone();
+    it('should set readFileSync output from buffer', function(testDone) {
+      this.stubFile(this.names[0])
+        .buffer(new Buffer(this.strings[0]))
+        .make();
+      fs.readFileSync(this.names[0]).toString().should.equal(this.strings[0]);
+      testDone();
     });
 
     it('should set readFile output', function(testDone) {
-      console.log('skipped: ' + this.test.title); testDone();
+      var self = this;
+      this.stubFile(this.names[0])
+        .buffer(this.strings[0])
+        .make();
+      fs.readFile(this.names[0], function(err, data) {
+        should.equal(err, null);
+        data.toString().should.equal(self.strings[0]);
+        testDone();
+      });
     });
 
-    it('should set readFileSync output', function(testDone) {
-      console.log('skipped: ' + this.test.title); testDone();
-    });
   });
 
   describe('FileStub#readdir()', function() {

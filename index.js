@@ -24,6 +24,7 @@ var sinonDoublistFs = module.exports = function(fs, test) {
   });
 
   test.fsStub = test.stub(fs);
+
   test.fsStub.exists.callsArgWith(1, false);
   test.fsStub.existsSync.returns(false);
 };
@@ -35,10 +36,22 @@ var bind = require('bind');
 var configurable = require('configurable.js');
 var fileMap = {};
 var mixin = {};
+var fsStubMap = {};
 
 mixin.stubFile = function(name) {
+  if (typeof name !== 'string' || name.trim() === '') {
+    throw new Error('invalid stubFile() name: ' + JSON.stringify(name));
+  }
+
   var fileStub = new FileStub(this.fsStub);
   return fileStub.set('name', name).set('sandbox', this);
+};
+
+fsStubMap.writeFileSync = function(filename, data) {
+  var stub = fileMap[filename];
+  if (stub) {
+    stub.buffer(data);
+  }
 };
 
 /**
@@ -69,6 +82,15 @@ function FileStub(fsStub) {
 }
 
 configurable(FileStub.prototype);
+
+FileStub.prototype.buffer = function(buffer) {
+  if (typeof buffer === 'string') {
+    buffer = new Buffer(buffer);
+  }
+  this.fsStub.readFileSync.withArgs(this.get('name')).returns(buffer);
+  this.fsStub.readFile.withArgs(this.get('name')).yields(null, buffer);
+  return this;
+};
 
 FileStub.prototype.readdir = function(files) {
   if (files === false) {
@@ -103,7 +125,7 @@ FileStub.prototype.stat = function(key, val) {
 FileStub.prototype.make = function() {
   var name = this.get('name');
   fileMap[name] = this;
-  this.fsStub.exists.withArgs(name).callsArgWith(1, true);
+  this.fsStub.exists.withArgs(name).yields(true);
   this.fsStub.existsSync.withArgs(name).returns(true);
 };
 
