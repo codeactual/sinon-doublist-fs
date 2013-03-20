@@ -71,12 +71,12 @@ describe('sinon-doublist-fs', function() {
   });
 
   describe('#writeFileSync()', function() {
-    it('should update fake file map w/ string', function(testDone) {
-      console.log('skipped: ' + this.test.title); testDone();
-    });
-
-    it('should update fake file map w/ buffer', function(testDone) {
-      console.log('skipped: ' + this.test.title); testDone();
+    it('should update fake file map', function(testDone) {
+      this.stubFile(this.names[0])
+        .make();
+      fs.writeFileSync(this.names[0], this.strings[0]);
+      fs.readFileSync(this.names[0]).toString().should.equal(this.strings[0]);
+      testDone();
     });
   });
 

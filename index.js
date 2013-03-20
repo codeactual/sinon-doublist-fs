@@ -27,6 +27,11 @@ var sinonDoublistFs = module.exports = function(fs, test) {
 
   test.fsStub.exists.callsArgWith(1, false);
   test.fsStub.existsSync.returns(false);
+
+  Object.keys(fsStubMap).forEach(function(method) {
+    test.fsStub[method].restore();
+    test.fsStub[method] = test.stub(fs, method, fsStubMap[method]);
+  });
 };
 
 sinonDoublistFs.require = require; // Give tests access to component loader.
