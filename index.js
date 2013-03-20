@@ -52,6 +52,14 @@ mixin.stubFile = function(name) {
   return fileStub.set('name', name).set('sandbox', this);
 };
 
+fsStubMap.writeFile = function(filename, data, cb) {
+  var stub = fileMap[filename];
+  if (stub) {
+    stub.buffer(data);
+  }
+  cb(null);
+};
+
 fsStubMap.writeFileSync = function(filename, data) {
   var stub = fileMap[filename];
   if (stub) {
