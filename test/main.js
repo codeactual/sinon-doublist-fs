@@ -15,7 +15,7 @@ describe('sinon-doublist-fs', function() {
   beforeEach(function(hookDone) {
     sinonDoublist(sinon, this);
     sinonDoublistFs(fs, this);
-    this.name = '/foo';
+    this.names = ['/foo'];
     hookDone();
   });
 
@@ -47,11 +47,13 @@ describe('sinon-doublist-fs', function() {
 
   describe('#existsSync()', function() {
     it('should detect stub', function(testDone) {
-      var batch = new Batch();
+      should.equal(fs.existsSync(this.names[0]), false);
+      this.stubFile(this.names[0]).make();
+      should.equal(fs.existsSync(this.names[0]), true);
 
-      should.equal(fs.existsSync(this.name), false);
-      this.stubFile(this.name).make();
-      should.equal(fs.existsSync(this.name), true);
+      should.equal(fs.existsSync(this.names[1]), false);
+      this.stubFile(this.names[1]).make();
+      should.equal(fs.existsSync(this.names[1]), true);
       testDone();
     });
   });
