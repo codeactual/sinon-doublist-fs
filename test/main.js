@@ -13,7 +13,7 @@ describe('sinon-doublist-fs', function() {
 
   beforeEach(function(hookDone) {
     sinonDoublist(sinon, this);
-    sinonDoublistFs(this);
+    sinonDoublistFs(fs, this);
     hookDone();
   });
 

@@ -8,12 +8,13 @@
 /*jshint node:true*/
 'use strict';
 
-var sinonDoublistFs = module.exports = function(test) {
+var sinonDoublistFs = module.exports = function(fs, test) {
   if (typeof test === 'string') {
-    globalInjector[test]();
+    globalInjector[test](fs);
     return;
   }
 
+  console.log('test', typeof test);
   Object.keys(mixin).forEach(function(method) {
     test[method] = bind(test, mixin[method]);
   });
@@ -95,9 +96,10 @@ mixin.stubFile = function(name) {
 };
 
 var globalInjector = {
-  mocha: function() {
+  mocha: function(fs) {
     beforeEach(function(hookDone) {
-      sinonDoublistFs(this);
+      sinonDoublistFs(fs, this);
+      this.useFakeFs(fs);
       hookDone();
     });
   }
