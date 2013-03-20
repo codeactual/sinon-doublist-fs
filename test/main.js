@@ -19,6 +19,11 @@ describe('sinon-doublist-fs', function() {
     hookDone();
   });
 
+  afterEach(function(hookDone) {
+    this.sandbox.restore();
+    hookDone();
+  });
+
   describe('#exists()', function() {
     it('should detect stub', function(testDone) {
       var self = this;
@@ -42,7 +47,12 @@ describe('sinon-doublist-fs', function() {
 
   describe('#existsSync()', function() {
     it('should detect stub', function(testDone) {
-      console.log('skipped: ' + this.test.title); testDone();
+      var batch = new Batch();
+
+      should.equal(fs.existsSync(this.name), false);
+      this.stubFile(this.name).make();
+      should.equal(fs.existsSync(this.name), true);
+      testDone();
     });
   });
 

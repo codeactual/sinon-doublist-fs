@@ -15,7 +15,7 @@ var sinonDoublistFs = module.exports = function(fs, test) {
     return;
   }
 
-  if (typeof test.fsStub !== 'undefined') {
+  if (typeof fs.exists.restore === 'function') {
     return;
   }
 
