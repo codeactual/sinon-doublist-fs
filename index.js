@@ -6,6 +6,7 @@
  */
 
 /*jshint node:true*/
+/*global beforeEach:false afterEach:false*/
 'use strict';
 
 var sinonDoublistFs = module.exports = function(fs, test) {
@@ -14,10 +15,17 @@ var sinonDoublistFs = module.exports = function(fs, test) {
     return;
   }
 
-  console.log('test', typeof test);
+  if (typeof test.fsStub !== 'undefined') {
+    return;
+  }
+
   Object.keys(mixin).forEach(function(method) {
     test[method] = bind(test, mixin[method]);
   });
+
+  test.fsStub = test.stub(fs);
+  test.fsStub.exists.callsArgWith(1, false);
+  test.fsStub.existsSync.returns(false);
 };
 
 sinonDoublistFs.require = require; // Give tests access to component loader.
@@ -25,16 +33,21 @@ sinonDoublistFs.require = require; // Give tests access to component loader.
 var is = require('is');
 var bind = require('bind');
 var configurable = require('configurable.js');
+var fileMap = {};
 var mixin = {};
 
-mixin.useFakeFs = function(fs) {
-  if (typeof this.fsStub === 'undefined') {
-    this.fsStub = this.stub(fs);
-  }
+mixin.stubFile = function(name) {
+  var fileStub = new FileStub(this.fsStub);
+  return fileStub.set('name', name).set('sandbox', this);
 };
 
-function FileStub() {
+/**
+ * An entry in the map of stubbed files.
+ */
+function FileStub(fsStub) {
+  this.fsStub = fsStub;
   this.settings = {
+    sandbox: {},
     name: '',
     readdir: false, // Or array of paths.
     stats: { // From fs.Stats example in manual.
@@ -88,18 +101,16 @@ FileStub.prototype.stat = function(key, val) {
 };
 
 FileStub.prototype.make = function() {
-};
-
-mixin.stubFile = function(name) {
-  var fileStub = new FileStub();
-  return fileStub.set('name', name);
+  var name = this.get('name');
+  fileMap[name] = this;
+  this.fsStub.exists.withArgs(name).callsArgWith(1, true);
+  this.fsStub.existsSync.withArgs(name).returns(true);
 };
 
 var globalInjector = {
   mocha: function(fs) {
     beforeEach(function(hookDone) {
       sinonDoublistFs(fs, this);
-      this.useFakeFs(fs);
       hookDone();
     });
   }
