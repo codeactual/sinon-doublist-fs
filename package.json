@@ -1,0 +1,39 @@
+{
+  "name": "sinon-doublist-fs",
+  "description": "node.js `fs` stubbing mixin for sinon-doublist",
+  "version": "0.1.0",
+  "keywords": [
+    "sinon",
+    "test",
+    "mixin",
+    "unit",
+    "spy",
+    "stub"
+  ],
+  "contributors": [
+    {
+      "name": "David Smith",
+      "web": "https://github.com/codeactual/"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/codeactual/sinon-doublist-fs/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codeactual/sinon-doublist-fs.git"
+  },
+  "peerDependencies": {
+    "sinon-doublist": "~0.2.1",
+    "component": "~0.13.0",
+    "sinon": "~1.6.0"
+  },
+  "devDependencies": {
+    "chai": "~1.5.0",
+    "mocha": "~1.8.1"
+  },
+  "scripts": {
+    "test": "make build && mocha --async-only --reporter spec test/main.js; mocha --async-only --reporter spec test/mocha.js"
+  }
+}
