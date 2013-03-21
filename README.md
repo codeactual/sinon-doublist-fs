@@ -1,13 +1,43 @@
 # sinon-doublist-fs
 
-sinon-doublist mixin providing node.js `fs` stubbing.
+node.js `fs` stubbing mixin for [sinon-doublist](https://github.com/codeactual/sinon-doublist).
 
 [![Build Status](https://travis-ci.org/codeactual/sinon-doublist-fs.png)](https://travis-ci.org/codeactual/sinon-doublist-fs)
 
 ## Example
 
 ```js
+sinonDoublist(sinon, 'mocha');
+sinonDoublistFs(fs, 'mocha');
+
+describe('my file I/O lib method', function() {
+  it('should write to a file, function(testDone) {
+    this.stubFile('/path/to/file').make();
+    myLib.doWork();
+
+  });
+});
 ```
+
+## Stub Behavior
+
+### fs.writeFile* / fs.readFile*
+
+> Writes will be captured and made available to later reads.
+
+Writes can also be made via `.buffer()` described in the API section.
+
+### fs.exists*
+
+> Responds with `false` for a given path until an associated stub is finalized by `.make()`.
+
+### fs.readdir*
+
+> Responds with paths passes to the `.readdir()` described in the API section.
+
+### fs.stat*
+
+> Responds with `fs.Stats` properties configured via `.stat()` described in the API section. `isFile()/isDirectory()` methods respond based use of `.readdir()`.
 
 ## Installation
 
@@ -27,26 +57,58 @@ Build standalone file in `build/`:
 
 ## API
 
+### #sinonDoublistFs(fs, test)
+
+> Mix the function set into the given `test` context object, and immediately stub all `fs` functions. Ex. use in a BDD-style `beforeEach`.
+
+Call after `sinonDoublist()`.
+
+### #sinonDoublistFs(fs, 'mocha')
+
+> Same mixin operation as above but with automatic `beforeEach/afterEach` boilerplating in mocha.
+
+### {object} fsStub
+
+> The above mixin operations will add `this.fsStub` to the test context. It is the product of `this.stub(fs)` and can be used for custom doubling not yet supported here.
+
+### #restoreFs()
+
+> Clean up resources not covered by `sinon.sandbox#restore`. Ex. use in a BDD-style `afterEach`.
+
+### #stubFile(name)
+
+> Begin configuring a file stub. Returns a fluent interface for further configuration.
+
+### .buffer(data) [#stubFile chain]
+
+> Set the buffer to be returned by `fs.readFile*`.
+
+### .stat(key, val) [#stubFile chain]
+
+> Set an `fs.Stats` property to be returned by `fs.stat*`.
+
+### .readdir(paths) [#stubFile chain]
+
+> Set `fs.readdir*` results.
+
+* To make the stub describe a directory, pass an array of path strings.
+* To make the stub describe a file again, pass `false`. (Only necessary to overwrite a past array value.)
+
+### .make() [#stubFile chain]
+
+> Finalize the `fs.{exists,stat,etc.}` stubs based on collected settings.
+
 ## License
 
   MIT
 
 ## Tests
 
-### Node
-
     npm install --devDependencies
     npm test
-
-### Browser via [Testacular](http://testacular.github.com/)
-
-* `npm install testacular`
-* `testacular start`
-* Browse `http://localhost:9876/`
-* `make build && testacular run`
 
 ## Change Log
 
 ### 0.1.0
 
-* Added: `stubFile`.
+* Add `stubFile` mixin.
