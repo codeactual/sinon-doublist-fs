@@ -108,6 +108,10 @@ Call after `sinonDoublist()`.
 
 ## Change Log
 
+### 0.1.1
+
+* Upgrade `codeactual/sinon-doublist` to 0.2.2.
+
 ### 0.1.0
 
 * Add `stubFile` mixin.
