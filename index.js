@@ -31,7 +31,7 @@ var sinonDoublistFs = module.exports = function(fs, test) {
 
   test.fsStub = test.stub(fs);
 
-  // Regain access to original constructor for fs.stat() stubbing.
+  // Regain access to original constructor for `fs.stat*` stubbing.
   test.fsStub.Stats.restore();
 
   // Force all existence checks to fail by default.
@@ -70,8 +70,7 @@ mixin.stubFile = function(name) {
 };
 
 /**
- * Replace fs.writeFile() in order to capture passed buffers for later
- * access by fs.readFile*().
+ * Capture passed buffers for later access by `fs.readFile*`.
  *
  * @param {string} filename
  * @param {string|object} data String or Buffer instance.
@@ -86,8 +85,7 @@ customFsStub.writeFile = function(filename, data, cb) {
 };
 
 /**
- * Replace fs.writeFile() in order to capture passed buffers for later
- * access by fs.readFile*().
+ * Capture passed buffers for later access by `fs.readFile*`.
  *
  * @param {string} filename
  * @param {string|object} data String or Buffer instance.
@@ -129,7 +127,7 @@ function FileStub(fsStub) {
 configurable(FileStub.prototype);
 
 /**
- * Set the buffer to be returned by readFile*() calls.
+ * Set the buffer to be returned by `fs.readFile*`.
  *
  * @param {string|object} buffer String or Buffer instance.
  * @return this
@@ -141,11 +139,12 @@ FileStub.prototype.buffer = function(buffer) {
   var fsStub = this.get('fsStub');
   fsStub.readFileSync.withArgs(this.get('name')).returns(buffer);
   fsStub.readFile.withArgs(this.get('name')).yields(null, buffer);
+  this.stat('size', buffer.length + 1);
   return this;
 };
 
 /**
- * Set readdir*() results.
+ * Set `fs.readdir*` results.
  *
  * @param {boolean|array} Array of strings, or false to revert to default isFile=true.
  * @return this
@@ -174,7 +173,7 @@ FileStub.prototype.stat = function(key, val) {
 };
 
 /**
- * Finalize the fs.{exists,stat,etc.} stubs based on collected settings.
+ * Finalize the `fs.{exists,stat,etc.}` stubs based on collected settings.
  */
 FileStub.prototype.make = function() {
   var name = this.get('name');

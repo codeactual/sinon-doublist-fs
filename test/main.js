@@ -154,6 +154,11 @@ describe('sinon-doublist-fs', function() {
       });
     });
 
+    it('should set stat size', function(testDone) {
+      this.stubFile(this.paths[0]).buffer(this.strings[0]).make();
+      fs.statSync(this.paths[0]).size.should.equal(this.strings[0].length + 1);
+      testDone();
+    });
   });
 
   describe('FileStub#readdir()', function() {
