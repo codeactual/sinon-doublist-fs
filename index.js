@@ -29,6 +29,8 @@ var sinonDoublistFs = module.exports = function(fs, test) {
     test[method] = bind(test, mixin[method]);
   });
 
+  fileStubMap = {};
+
   test.fsStub = test.stub(fs);
 
   // Regain access to original constructor for `fs.stat*` stubbing.
@@ -50,7 +52,7 @@ sinonDoublistFs.require = require; // Give tests access to component loader.
 var is = require('is');
 var bind = require('bind');
 var configurable = require('configurable.js');
-var fileStubMap = {};
+var fileStubMap;
 var mixin = {};
 var customFsStub = {};
 
@@ -67,6 +69,13 @@ mixin.stubFile = function(name) {
 
   var fileStub = new FileStub(this.fsStub);
   return fileStub.set('name', name).set('sandbox', this);
+};
+
+/**
+ * Clean up resources not covered by sinonDoublist's sandbox restoration.
+ */
+mixin.restoreFs = function() {
+  fileStubMap = null;
 };
 
 /**
@@ -215,6 +224,11 @@ var globalInjector = {
   mocha: function(fs) {
     beforeEach(function(hookDone) {
       sinonDoublistFs(fs, this);
+      hookDone();
+    });
+
+    afterEach(function(hookDone) {
+      this.restoreFs();
       hookDone();
     });
   }

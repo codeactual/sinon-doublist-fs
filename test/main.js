@@ -22,6 +22,7 @@ describe('sinon-doublist-fs', function() {
   });
 
   afterEach(function(hookDone) {
+    this.restoreFs();
     this.sandbox.restore();
     hookDone();
   });
