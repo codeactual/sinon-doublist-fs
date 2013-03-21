@@ -187,10 +187,13 @@ describe('sinon-doublist-fs', function() {
     });
 
     it('should stub isFile/isDirectory when passed false', function(testDone) {
+      var self = this;
       this.stubFile(this.paths[0]).readdir(this.paths).make();
       fs.readdirSync(this.paths[0]).should.deep.equal(this.paths);
       this.stubFile(this.paths[0]).readdir(false).make();
-      fs.readdirSync(this.paths[0]).should.deep.equal([]);
+      (function() {
+        fs.readdirSync(self.paths[0]);
+      }).should.Throw(Error, 'ENOTDIR, not a directory ' + this.paths[0]);
       testDone();
     });
   });

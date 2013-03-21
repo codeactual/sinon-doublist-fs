@@ -147,14 +147,21 @@ FileStub.prototype.make = function() {
   });
   var paths = this.get('readdir');
   var isDir = is.array(paths);
+
   stubMany(statsObj, 'isDirectory').isDirectory.returns(isDir);
   stubMany(statsObj, 'isFile').isFile.returns(!isDir);
+
   fsStub.stat.withArgs(this.get('name')).yields(null, statsObj);
   fsStub.statSync.withArgs(this.get('name')).returns(statsObj);
 
-  paths = isDir ? paths : [];
-  fsStub.readdir.withArgs(this.get('name')).yields(null, paths);
-  fsStub.readdirSync.withArgs(this.get('name')).returns(paths);
+  if (isDir) {
+    fsStub.readdir.withArgs(this.get('name')).yields(null, paths);
+    fsStub.readdirSync.withArgs(this.get('name')).returns(paths);
+  } else {
+    var err = new Error('ENOTDIR, not a directory ' + name);
+    fsStub.readdir.withArgs(this.get('name')).throws(err)
+    fsStub.readdirSync.withArgs(this.get('name')).throws(err);
+  }
 };
 
 var globalInjector = {
