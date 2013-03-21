@@ -54,10 +54,6 @@ Build standalone file in `build/`:
 
     $ make dist
 
-### NPM
-
-    $ npm install sinon-doublist-fs
-
 ## API
 
 ### #sinonDoublistFs(fs, test)
