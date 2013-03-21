@@ -111,33 +111,19 @@ FileStub.prototype.buffer = function(buffer) {
 };
 
 FileStub.prototype.readdir = function(files) {
-  if (files === false) {
-    // TODO set isFile return
-    // TODO set isDirectory return
-  } else if (is.array(files)) {
-    // TODO set isFile return
-    // TODO set isDirectory return
-    this.set('readdir', files);
-  } else { // Avoid silent test misconfig.
+  if (false !== files && !is.array(files))  { // Avoid silent test misconfig.
     throw new Error('invalid readdir config: ' + JSON.stringify(files));
   }
+  return this.set('readdir', files);
 };
 
 FileStub.prototype.stat = function(key, val) {
-  var isMethods = [
-    'BlockDevice', 'CharacterDevice', 'FIFO', 'Socket'
-  ];
-  if (-1 === isMethods.indexOf('is' + key)) {
-    // TODO set the return value of the is*() stub
-    return;
-  }
-
   var stats = this.get('stats');
   if (typeof stats[key] === 'undefined') { // Avoid silent test misconfig.
     throw new Error('invalid fs.Stats property: ' + key);
   }
   stats[key] = val;
-  this.set('stats', stats);
+  return this.set('stats', stats);
 };
 
 FileStub.prototype.make = function() {
@@ -156,11 +142,16 @@ FileStub.prototype.make = function() {
   Object.keys(stats).forEach(function(key) {
     statsObj[key] = stats[key];
   });
-  var isDir = is.array(this.get('readdir'));
+  var paths = this.get('readdir');
+  var isDir = is.array(paths);
   stubMany(statsObj, 'isDirectory').isDirectory.returns(isDir);
   stubMany(statsObj, 'isFile').isFile.returns(!isDir);
   fsStub.stat.withArgs(this.get('name')).yields(null, statsObj);
   fsStub.statSync.withArgs(this.get('name')).returns(statsObj);
+
+  paths = isDir ? paths : [];
+  fsStub.readdir.withArgs(this.get('name')).yields(null, paths);
+  fsStub.readdirSync.withArgs(this.get('name')).returns(paths);
 };
 
 var globalInjector = {
