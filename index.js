@@ -23,8 +23,9 @@ var sinonDoublistFs = module.exports = function(fs, test) {
     test[method] = bind(test, mixin[method]);
   });
 
-  test.fsStubOrig = fs;
   test.fsStub = test.stub(fs);
+
+  console.log('equal', fs === test.fsStub);
 
   test.fsStub.Stats.restore();
 
@@ -42,7 +43,7 @@ sinonDoublistFs.require = require; // Give tests access to component loader.
 var is = require('is');
 var bind = require('bind');
 var configurable = require('configurable.js');
-var fileMap = {};
+var fileStubMap = {};
 var mixin = {};
 var fsStubMap = {};
 
@@ -51,12 +52,12 @@ mixin.stubFile = function(name) {
     throw new Error('invalid stubFile() name: ' + JSON.stringify(name));
   }
 
-  var fileStub = new FileStub(this.fsStubOrig, this.fsStub);
+  var fileStub = new FileStub(this.fsStub);
   return fileStub.set('name', name).set('sandbox', this);
 };
 
 fsStubMap.writeFile = function(filename, data, cb) {
-  var stub = fileMap[filename];
+  var stub = fileStubMap[filename];
   if (stub) {
     stub.buffer(data);
   }
@@ -64,7 +65,7 @@ fsStubMap.writeFile = function(filename, data, cb) {
 };
 
 fsStubMap.writeFileSync = function(filename, data) {
-  var stub = fileMap[filename];
+  var stub = fileStubMap[filename];
   if (stub) {
     stub.buffer(data);
   }
@@ -73,9 +74,8 @@ fsStubMap.writeFileSync = function(filename, data) {
 /**
  * An entry in the map of stubbed files.
  */
-function FileStub(fs, fsStub) {
+function FileStub(fsStub) {
   this.settings = {
-    fs: fs,
     fsStub: fsStub,
     sandbox: {},
     name: '',
@@ -126,11 +126,14 @@ FileStub.prototype.stat = function(key, val) {
   return this.set('stats', stats);
 };
 
+/**
+ * Finalize the fs stubs based on collected settings.
+ */
 FileStub.prototype.make = function() {
   var name = this.get('name');
-  fileMap[name] = this;
 
-  var fs = this.get('fs');
+  fileStubMap[name] = this; // For later lookup in fake writeFile, etc.
+
   var fsStub = this.get('fsStub');
   var stubMany = this.get('sandbox').stubMany;
 
@@ -138,7 +141,7 @@ FileStub.prototype.make = function() {
   fsStub.existsSync.withArgs(name).returns(true);
 
   var stats = this.get('stats');
-  var statsObj = new fs.Stats();
+  var statsObj = new fsStub.Stats();
   Object.keys(stats).forEach(function(key) {
     statsObj[key] = stats[key];
   });
