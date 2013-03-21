@@ -9,32 +9,39 @@
 /*global beforeEach:false afterEach:false*/
 'use strict';
 
+/**
+ * @param {object} fs Pre-loaded module.
+ * @param {string|object} test Test context (with sinonDoublist sandbox),
+ *   or the name of a supported runner to globally configure.
+ *   Supported: 'mocha'
+ */
 var sinonDoublistFs = module.exports = function(fs, test) {
   if (is.string(test)) {
     globalInjector[test](fs);
     return;
   }
 
-  if (is.Function(fs.exists.restore)) {
+  if (is.Function(fs.exists.restore)) { // Already doubled.
     return;
   }
 
-  Object.keys(mixin).forEach(function(method) {
+  Object.keys(mixin).forEach(function(method) { // stubFile(), etc.
     test[method] = bind(test, mixin[method]);
   });
 
   test.fsStub = test.stub(fs);
 
-  console.log('equal', fs === test.fsStub);
-
+  // Regain access to original constructor for fs.stat() stubbing.
   test.fsStub.Stats.restore();
 
+  // Force all existence checks to fail by default.
   test.fsStub.exists.callsArgWith(1, false);
   test.fsStub.existsSync.returns(false);
 
-  Object.keys(fsStubMap).forEach(function(method) {
+  // Replace initial full-object stubs with some custom ones.
+  Object.keys(customFsStub).forEach(function(method) {
     test.fsStub[method].restore();
-    test.fsStub[method] = test.stub(fs, method, fsStubMap[method]);
+    test.fsStub[method] = test.stub(fs, method, customFsStub[method]);
   });
 };
 
@@ -45,8 +52,14 @@ var bind = require('bind');
 var configurable = require('configurable.js');
 var fileStubMap = {};
 var mixin = {};
-var fsStubMap = {};
+var customFsStub = {};
 
+/**
+ * Begin configuring a file stub.
+ *
+ * @param {string} name File/directory name.
+ * @return {object} this
+ */
 mixin.stubFile = function(name) {
   if (!is.string(name) || name.trim() === '') {
     throw new Error('invalid stubFile() name: ' + JSON.stringify(name));
@@ -56,7 +69,15 @@ mixin.stubFile = function(name) {
   return fileStub.set('name', name).set('sandbox', this);
 };
 
-fsStubMap.writeFile = function(filename, data, cb) {
+/**
+ * Replace fs.writeFile() in order to capture passed buffers for later
+ * access by fs.readFile*().
+ *
+ * @param {string} filename
+ * @param {string|object} data String or Buffer instance.
+ * @param {function} cb
+ */
+customFsStub.writeFile = function(filename, data, cb) {
   var stub = fileStubMap[filename];
   if (stub) {
     stub.buffer(data);
@@ -64,7 +85,14 @@ fsStubMap.writeFile = function(filename, data, cb) {
   cb(null);
 };
 
-fsStubMap.writeFileSync = function(filename, data) {
+/**
+ * Replace fs.writeFile() in order to capture passed buffers for later
+ * access by fs.readFile*().
+ *
+ * @param {string} filename
+ * @param {string|object} data String or Buffer instance.
+ */
+customFsStub.writeFileSync = function(filename, data) {
   var stub = fileStubMap[filename];
   if (stub) {
     stub.buffer(data);
@@ -76,10 +104,10 @@ fsStubMap.writeFileSync = function(filename, data) {
  */
 function FileStub(fsStub) {
   this.settings = {
-    fsStub: fsStub,
-    sandbox: {},
     name: '',
     readdir: false, // Or array of paths.
+    fsStub: fsStub,
+    sandbox: {}, // sinonDoublist sandbox.
     stats: { // From fs.Stats example in manual.
       dev: 2114,
       ino: 48064969,
@@ -100,6 +128,12 @@ function FileStub(fsStub) {
 
 configurable(FileStub.prototype);
 
+/**
+ * Set the buffer to be returned by readFile*() calls.
+ *
+ * @param {string|object} buffer String or Buffer instance.
+ * @return this
+ */
 FileStub.prototype.buffer = function(buffer) {
   if (is.string(buffer)) {
     buffer = new Buffer(buffer);
@@ -110,6 +144,12 @@ FileStub.prototype.buffer = function(buffer) {
   return this;
 };
 
+/**
+ * Set readdir*() results.
+ *
+ * @param {boolean|array} Array of strings, or false to revert to default isFile=true.
+ * @return this
+ */
 FileStub.prototype.readdir = function(files) {
   if (false !== files && !is.array(files))  { // Avoid silent test misconfig.
     throw new Error('invalid readdir config: ' + JSON.stringify(files));
@@ -117,6 +157,13 @@ FileStub.prototype.readdir = function(files) {
   return this.set('readdir', files);
 };
 
+/**
+ * Set an fs.Stats property.
+ *
+ * @param {string} key Ex. 'size' or 'gid'.
+ * @param {mixed} val
+ * @return this
+ */
 FileStub.prototype.stat = function(key, val) {
   var stats = this.get('stats');
   if (typeof stats[key] === 'undefined') { // Avoid silent test misconfig.
@@ -127,7 +174,7 @@ FileStub.prototype.stat = function(key, val) {
 };
 
 /**
- * Finalize the fs stubs based on collected settings.
+ * Finalize the fs.{exists,stat,etc.} stubs based on collected settings.
  */
 FileStub.prototype.make = function() {
   var name = this.get('name');
@@ -145,6 +192,7 @@ FileStub.prototype.make = function() {
   Object.keys(stats).forEach(function(key) {
     statsObj[key] = stats[key];
   });
+
   var paths = this.get('readdir');
   var isDir = is.array(paths);
 
