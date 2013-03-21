@@ -10,11 +10,14 @@ node.js `fs` stubbing mixin for [sinon-doublist](https://github.com/codeactual/s
 sinonDoublist(sinon, 'mocha');
 sinonDoublistFs(fs, 'mocha');
 
-describe('my file I/O lib method', function() {
-  it('should write to a file, function(testDone) {
-    this.stubFile('/path/to/file').make();
-    myLib.doWork();
-
+describe('MyLib', function() {
+  describe('#validate()', function() {
+    it('should detect file that is too large', function() {
+      var filename = '/path/to/file';
+      this.stubFile(filename).stat('size', 1024 * 1024 * 1024).make();
+      var myLib = new MyLib(filename);
+      myLib.validate().should.equal(false);
+    });
   });
 });
 ```
