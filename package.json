@@ -24,9 +24,6 @@
     "type": "git",
     "url": "https://github.com/codeactual/sinon-doublist-fs.git"
   },
-  "dependencies": {
-    "sinon-doublist": "~0.2.3"
-  },
   "devDependencies": {
     "chai": "~1.5.0",
     "component": "~0.13.0",
