@@ -108,6 +108,10 @@ Call after `sinonDoublist()`.
 
 ## Change Log
 
+### next
+
+* Upgrade `codeactual/sinon-doublist` to 0.2.3.
+
 ### 0.1.1
 
 * Upgrade `codeactual/sinon-doublist` to 0.2.2.
