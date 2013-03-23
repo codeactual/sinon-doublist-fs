@@ -4,7 +4,9 @@ node.js `fs` stubbing mixin for [sinon-doublist](https://github.com/codeactual/s
 
 [![Build Status](https://travis-ci.org/codeactual/sinon-doublist-fs.png)](https://travis-ci.org/codeactual/sinon-doublist-fs)
 
-## Example
+## Examples
+
+### Single file
 
 ```js
 sinonDoublist(sinon, 'mocha');
@@ -20,6 +22,32 @@ describe('MyLib', function() {
     });
   });
 });
+```
+
+### File tree
+
+```js
+/**
+ * /root/a
+ * /root/a/b
+ * /root/a/b2
+ * /root/a2
+ * /root/a3
+ * /root/a3/b4
+ * /root/a3/b4/c
+ */
+this.stubFile('/root').readdir([
+  this.stubFile('/root/a').readdir([
+    this.stubFile('/root/a/b').size(100),
+    this.stubFile('/root/a/b2').size(50)
+  ]),
+  this.stubFile('/root/a2').size(10),
+  this.stubFile('/root/a3').readdir([
+    this.stubFile('/root/a3/b4').readdir([
+      this.stubFile('/root/a3/b4/c').size(20)
+    ])
+  ])
+]).make();
 ```
 
 ## Stub Behavior
@@ -90,8 +118,11 @@ Call after `sinonDoublist()`.
 
 > Set `fs.readdir*` results.
 
-* To make the stub describe a directory, pass an array of path strings.
-* To make the stub describe a file again, pass `false`. (Only necessary to overwrite a past array value.)
+* To fake a directory, pass an array of path strings.
+* To fake a tree, pass an array of `stubFile()` chains without final `make()` calls.
+* To fake a file again, pass `false`. (Only necessary to overwrite a past array value.)
+
+Omit trailing slashes from path strings.
 
 ### .make() [#stubFile chain]
 
@@ -108,8 +139,9 @@ Call after `sinonDoublist()`.
 
 ## Change Log
 
-### next
+### 0.1.2
 
+* Support file tree building by passing an array of `stubFile()` chains to `.readdir()`.
 * Upgrade `codeactual/sinon-doublist` to 0.2.3.
 
 ### 0.1.1

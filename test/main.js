@@ -202,6 +202,53 @@ describe('sinon-doublist-fs', function() {
       }).should.Throw(Error, 'ENOTDIR, not a directory ' + this.paths[0]);
       testDone();
     });
+
+    it('should accept array of FileStub objects to support trees', function(testDone) {
+      /**
+       * Create this tree:
+       *
+       * /a
+       * /a/b
+       * /a/b2
+       * /a2
+       * /a3
+       * /a3/b4
+       * /a3/b4/c
+       *
+       */
+      this.stubFile(this.paths[0]).readdir([
+        this.stubFile(this.paths[0] + '/a').readdir([
+          this.stubFile(this.paths[0] + '/a/b'),
+          this.stubFile(this.paths[0] + '/a/b2')
+        ]),
+        this.stubFile(this.paths[0] + '/a2'),
+        this.stubFile(this.paths[0] + '/a3').readdir([
+          this.stubFile(this.paths[0] + '/a3/b4').readdir([
+            this.stubFile(this.paths[0] + '/a3/b4/c')
+          ])
+        ])
+      ]).make();
+
+      // Verify file types and directory contents.
+      fs.statSync(this.paths[0] + '/a').isDirectory().should.equal(true);
+      fs.readdirSync(this.paths[0] + '/a').should.deep.equal([
+        'b',
+        'b2'
+      ]);
+      fs.statSync(this.paths[0] + '/a/b').isFile().should.equal(true);
+      fs.statSync(this.paths[0] + '/a/b2').isFile().should.equal(true);
+      fs.statSync(this.paths[0] + '/a2').isFile().should.equal(true);
+      fs.statSync(this.paths[0] + '/a3').isDirectory().should.equal(true);
+      fs.readdirSync(this.paths[0] + '/a3').should.deep.equal([
+        'b4'
+      ]);
+      fs.statSync(this.paths[0] + '/a3/b4').isDirectory().should.equal(true);
+      fs.readdirSync(this.paths[0] + '/a3/b4').should.deep.equal([
+        'c'
+      ]);
+      fs.statSync(this.paths[0] + '/a3/b4/c').isFile().should.equal(true);
+      testDone();
+    });
   });
 });
 

@@ -59,7 +59,7 @@ var customFsStub = {};
 /**
  * Begin configuring a file stub.
  *
- * @param {string} name File/directory name.
+ * @param {string} name File/directory name without trailing slash.
  * @return {object} this
  */
 mixin.stubFile = function(name) {
@@ -155,14 +155,30 @@ FileStub.prototype.buffer = function(buffer) {
 /**
  * Set `fs.readdir*` results.
  *
- * @param {boolean|array} Array of strings, or false to revert to default isFile=true.
+ * @param {boolean|array} paths
+ *   false: revert to default isFile=true
+ *   array:
+ *     path strings without trailing slash
+ *     FileStub objects whose make() has not yet been called
  * @return this
  */
-FileStub.prototype.readdir = function(files) {
-  if (false !== files && !is.array(files))  { // Avoid silent test misconfig.
-    throw new Error('invalid readdir config: ' + JSON.stringify(files));
+FileStub.prototype.readdir = function(paths) {
+  var isArray = is.array(paths);
+  if (false !== paths && !isArray)  { // Avoid silent test misconfig.
+    throw new Error('invalid readdir config: ' + JSON.stringify(paths));
   }
-  return this.set('readdir', files);
+
+  if (isArray && is.object(paths[0])) {
+    var relPaths = [];
+    var parentName = this.get('name');
+    paths.forEach(function(stub) {
+      relPaths.push(stub.get('name').replace(parentName + '/', ''));
+      stub.make();
+    });
+    paths = relPaths;
+  }
+
+  return this.set('readdir', paths);
 };
 
 /**
@@ -215,7 +231,7 @@ FileStub.prototype.make = function() {
     fsStub.readdirSync.withArgs(this.get('name')).returns(paths);
   } else {
     var err = new Error('ENOTDIR, not a directory ' + name);
-    fsStub.readdir.withArgs(this.get('name')).throws(err)
+    fsStub.readdir.withArgs(this.get('name')).throws(err);
     fsStub.readdirSync.withArgs(this.get('name')).throws(err);
   }
 };
