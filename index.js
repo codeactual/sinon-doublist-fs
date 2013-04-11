@@ -51,6 +51,7 @@ sinonDoublistFs.require = require; // Give tests access to component loader.
 
 var is = require('is');
 var bind = require('bind');
+var clone = require('clone');
 var configurable = require('configurable.js');
 var fileStubMap;
 var mixin = {};
@@ -76,6 +77,32 @@ mixin.stubFile = function(name) {
  */
 mixin.restoreFs = function() {
   fileStubMap = null;
+};
+
+/**
+ * Clone the file stub and remove the old one.
+ *
+ * @param {string} oldPath
+ * @param {string} newPath
+ */
+customFsStub.renameSync = function(oldPath, newPath) {
+  fileStubMap[newPath] = FileStub.clone(fileStubMap[oldPath]);
+  fileStubMap[newPath].set('name', newPath);
+  fileStubMap[newPath].make();
+
+  var parentdir = fileStubMap[newPath].get('parentdir');
+  var parentStub = fileStubMap[parentdir];
+  if (parentStub) {
+    var parentReaddir = parentStub.get('readdir');
+    var relPath = newPath.replace(parentdir + '/', '');
+    if (-1 === parentReaddir.indexOf(relPath)) {
+      parentReaddir.push(relPath);
+      parentStub.set('readdir', parentReaddir);
+      parentStub.make();
+    }
+  }
+
+  fileStubMap[oldPath].unlink();
 };
 
 /**
@@ -113,6 +140,7 @@ function FileStub(fsStub) {
   this.settings = {
     name: '',
     readdir: false, // Or array of paths.
+    parentdir: '',
     fsStub: fsStub,
     sandbox: {}, // sinonDoublist sandbox.
     stats: { // From fs.Stats example in manual.
@@ -136,6 +164,25 @@ function FileStub(fsStub) {
 configurable(FileStub.prototype);
 
 /**
+ * Create a new FileStub instance based on the settings of the source.
+ *
+ * @param {object} srcStub
+ * @return {object}
+ */
+FileStub.clone = function(srcStub) {
+  var dstStub = new FileStub(srcStub.get('fsStub'));
+  var simpleObjects = ['stats'];
+  Object.keys(srcStub.settings).forEach(function(key) {
+    if (-1 === simpleObjects.indexOf(key)) {
+      dstStub.settings[key] = srcStub.settings[key];
+    } else {
+      dstStub.settings[key] = clone(srcStub.settings[key]);
+    }
+  });
+  return dstStub;
+};
+
+/**
  * Set the buffer to be returned by `fs.readFile*`.
  *
  * @param {string|object} buffer String or Buffer instance.
@@ -151,7 +198,7 @@ FileStub.prototype.buffer = function(buffer) {
   this.stat('size', buffer.length + 1);
   return this;
 };
-
+;
 /**
  * Set `fs.readdir*` results.
  *
@@ -173,6 +220,7 @@ FileStub.prototype.readdir = function(paths) {
     var parentName = this.get('name');
     paths.forEach(function(stub) {
       relPaths.push(stub.get('name').replace(parentName + '/', ''));
+      stub.set('parentdir', parentName);
       stub.make();
     });
     paths = relPaths;
@@ -234,6 +282,37 @@ FileStub.prototype.make = function() {
     fsStub.readdir.withArgs(this.get('name')).throws(err);
     fsStub.readdirSync.withArgs(this.get('name')).throws(err);
   }
+};
+
+/**
+ * Reverse make() stubbing.
+ */
+FileStub.prototype.unlink = function() {
+  var name = this.get('name');
+  var fsStub = this.get('fsStub');
+  var parentdir = this.get('parentdir');
+  var relPath = name.replace(parentdir + '/', '');
+
+  var parentStub = fileStubMap[parentdir];
+  if (parentStub) {
+    var parentReaddir = parentStub.get('readdir');
+    parentReaddir.splice(parentReaddir.indexOf(relPath), 1);
+    parentStub.set('readdir', parentReaddir);
+    parentStub.make();
+    fsStub.readdir.withArgs(parentdir).yields(null, parentReaddir);
+    fsStub.readdirSync.withArgs(parentdir).returns(parentReaddir);
+  }
+
+  fsStub.exists.withArgs(name).yields(false);
+  fsStub.existsSync.withArgs(name).returns(false);
+
+  var err = new Error('ENOENT, no such file or directory \'' + name + '\'');
+  fsStub.stat.withArgs(name).throws(err);
+  fsStub.statSync.withArgs(name).throws(err);
+  fsStub.readdir.withArgs(name).throws(err);
+  fsStub.readdirSync.withArgs(name).throws(err);
+
+  //delete fileStubMap[name];
 };
 
 var globalInjector = {

@@ -250,5 +250,88 @@ describe('sinon-doublist-fs', function() {
       testDone();
     });
   });
+
+  describe('#renameSync()', function() {
+    it('should add to stub map with file source', function(testDone) {
+      this.stubFile(this.paths[0]).readdir([
+        this.stubFile(this.paths[0] + '/a')
+      ]).make();
+
+      fs.existsSync(this.paths[0] + '/a').should.equal(true);
+      fs.existsSync(this.paths[0] + '/b').should.equal(false);
+      fs.readdirSync(this.paths[0]).should.deep.equal(['a']);
+
+      fs.renameSync(this.paths[0] + '/a', this.paths[0] + '/b');
+
+      fs.existsSync(this.paths[0] + '/a').should.equal(false);
+      fs.existsSync(this.paths[0] + '/b').should.equal(true);
+      fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
+      testDone();
+    });
+
+    it('should overwrite stub map entry with file source', function(testDone) {
+      this.stubFile(this.paths[0]).readdir([
+        this.stubFile(this.paths[0] + '/a'),
+        this.stubFile(this.paths[0] + '/b'),
+      ]).make();
+
+      fs.existsSync(this.paths[0] + '/a').should.equal(true);
+      fs.existsSync(this.paths[0] + '/b').should.equal(true);
+      fs.readdirSync(this.paths[0]).should.deep.equal(['a', 'b']);
+
+      fs.renameSync(this.paths[0] + '/a', this.paths[0] + '/b');
+
+      fs.existsSync(this.paths[0] + '/a').should.equal(false);
+      fs.existsSync(this.paths[0] + '/b').should.equal(true);
+      fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
+      testDone();
+    });
+
+    it('should add to stub map with dir source', function(testDone) {
+      this.stubFile(this.paths[0]).readdir([
+        this.stubFile(this.paths[0] + '/a').readdir([
+          this.stubFile(this.paths[0] + '/a/c')
+        ])
+      ]).make();
+
+      fs.existsSync(this.paths[0] + '/a').should.equal(true);
+      fs.existsSync(this.paths[0] + '/b').should.equal(false);
+      fs.readdirSync(this.paths[0]).should.deep.equal(['a']);
+
+      fs.renameSync(this.paths[0] + '/a', this.paths[0] + '/b');
+
+      fs.existsSync(this.paths[0] + '/a').should.equal(false);
+      fs.existsSync(this.paths[0] + '/b').should.equal(true);
+      fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
+
+      fs.readdirSync(this.paths[0] + '/b').should.deep.equal(['c']);
+      testDone();
+    });
+
+    it('should overwrite stub map entry with dir source', function(testDone) {
+      this.stubFile(this.paths[0]).readdir([
+        this.stubFile(this.paths[0] + '/a').readdir([
+          this.stubFile(this.paths[0] + '/a/c')
+        ]),
+        this.stubFile(this.paths[0] + '/b').readdir([
+          this.stubFile(this.paths[0] + '/b/d')
+        ])
+      ]).make();
+
+      fs.existsSync(this.paths[0] + '/a').should.equal(true);
+      fs.existsSync(this.paths[0] + '/b').should.equal(true);
+      fs.readdirSync(this.paths[0]).should.deep.equal(['a', 'b']);
+
+      fs.renameSync(this.paths[0] + '/a', this.paths[0] + '/b');
+
+      fs.existsSync(this.paths[0] + '/a').should.equal(false);
+      fs.existsSync(this.paths[0] + '/b').should.equal(true);
+      fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
+
+      fs.readdirSync(this.paths[0] + '/b').should.deep.equal(['c']);
+      testDone();
+    });
+  });
+
 });
 
