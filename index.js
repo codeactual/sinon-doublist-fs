@@ -313,6 +313,14 @@ FileStub.prototype.unlink = function() {
   fsStub.readdirSync.withArgs(name).throws(err);
 
   delete fileStubMap[name];
+
+  var readdir = this.get('readdir');
+  if (readdir) {
+    readdir.forEach(function(childName) {
+      name = name + '/' + childName;
+      fileStubMap[name].unlink();
+    });
+  }
 };
 
 var globalInjector = {
