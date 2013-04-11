@@ -1,6 +1,6 @@
 var sinon = require('sinon');
 var chai = require('chai');
-var sinonDoublistFs = require('../build/build');
+var sinonDoublistFs = require('../dist/sinon-doublist-fs');
 var sinonDoublist = sinonDoublistFs.require('sinon-doublist');
 var fs = require('fs');
 

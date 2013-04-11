@@ -1,7 +1,7 @@
 /*jshint expr:true*/
 var sinon = require('sinon');
 var chai = require('chai');
-var sinonDoublistFs = require('../build/build');
+var sinonDoublistFs = require('../dist/sinon-doublist-fs.js');
 var sinonDoublist = sinonDoublistFs.require('sinon-doublist');
 var Batch = sinonDoublistFs.require('batch');
 var fs = require('fs');
@@ -272,7 +272,7 @@ describe('sinon-doublist-fs', function() {
     it('should overwrite stub map entry with file source', function(testDone) {
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a'),
-        this.stubFile(this.paths[0] + '/b'),
+        this.stubFile(this.paths[0] + '/b')
       ]).make();
 
       fs.existsSync(this.paths[0] + '/a').should.equal(true);
