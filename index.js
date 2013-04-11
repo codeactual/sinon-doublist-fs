@@ -38,6 +38,13 @@ var sinonDoublistFs = module.exports = function(fs, test) {
     writable: true
   });
 
+  Object.defineProperty(test, 'fileStubMap', {
+    value: fileStubMap,
+    enumerable: false,
+    configurable: false,
+    writable: true
+  });
+
   // Regain access to original constructor for `fs.stat*` stubbing.
   test.fsStub.Stats.restore();
 
