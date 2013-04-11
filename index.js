@@ -200,6 +200,25 @@ FileStub.prototype.buffer = function(buffer) {
 };
 
 /**
+ * Map all sub-dir file stubs.
+ *
+ * @param {string} path
+ * @param {function} cb Receives (stub).
+ */
+FileStub.prototype.map = function(cb) {
+  var readdir = this.get('readdir');
+  if (!readdir) { return; }
+  var name = this.get('name');
+  readdir.forEach(function(relPath) {
+    var stub = fileStubMap[name + '/' + relPath];
+    if (stub) {
+      cb(stub);
+      stub.map(cb);
+    }
+  });
+};
+
+/**
  * Set `fs.readdir*` results.
  *
  * @param {boolean|array} paths
@@ -316,8 +335,8 @@ FileStub.prototype.unlink = function() {
 
   var readdir = this.get('readdir');
   if (readdir) {
-    readdir.forEach(function(childName) {
-      name = name + '/' + childName;
+    readdir.forEach(function(relPath) {
+      name = name + '/' + relPath;
       fileStubMap[name].unlink();
     });
   }
