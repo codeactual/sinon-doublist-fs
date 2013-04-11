@@ -6,7 +6,7 @@
  */
 
 /*jshint node:true*/
-/*global beforeEach:false afterEach:false*/
+/*global beforeEach:false, afterEach:false*/
 'use strict';
 
 /**
@@ -198,7 +198,7 @@ FileStub.prototype.buffer = function(buffer) {
   this.stat('size', buffer.length + 1);
   return this;
 };
-;
+
 /**
  * Set `fs.readdir*` results.
  *
