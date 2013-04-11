@@ -128,16 +128,24 @@ Omit trailing slashes from path strings.
 
 > Finalize the `fs.{exists,stat,etc.}` stubs based on collected settings.
 
+### .unlink() [#stubFile chain]
+
+> Undo make().
+
 ## License
 
   MIT
 
 ## Tests
 
-    npm install --devDependencies
     npm test
 
 ## Change Log
+
+### 0.2.0
+
+* Add `fs.renameSync` stub.
+* Add `FileStub#unlink`.
 
 ### 0.1.2
 
