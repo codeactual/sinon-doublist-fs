@@ -285,7 +285,7 @@ FileStub.prototype.make = function() {
 };
 
 /**
- * Reverse make() stubbing.
+ * Undo make().
  */
 FileStub.prototype.unlink = function() {
   var name = this.get('name');
@@ -312,7 +312,7 @@ FileStub.prototype.unlink = function() {
   fsStub.readdir.withArgs(name).throws(err);
   fsStub.readdirSync.withArgs(name).throws(err);
 
-  //delete fileStubMap[name];
+  delete fileStubMap[name];
 };
 
 var globalInjector = {
