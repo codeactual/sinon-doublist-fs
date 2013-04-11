@@ -31,7 +31,12 @@ var sinonDoublistFs = module.exports = function(fs, test) {
 
   fileStubMap = {};
 
-  test.fsStub = test.stub(fs);
+  Object.defineProperty(test, 'fsStub', {
+    value: test.stub(fs),
+    enumerable: false,
+    configurable: false,
+    writable: true
+  });
 
   // Regain access to original constructor for `fs.stat*` stubbing.
   test.fsStub.Stats.restore();
