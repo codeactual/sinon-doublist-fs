@@ -114,6 +114,7 @@ customFsStub.renameSync = function(oldPath, newPath) {
     }
   }
 
+  fileStubMap[oldPath].copyTree(newPath);
   fileStubMap[oldPath].unlink();
 };
 
@@ -227,6 +228,23 @@ FileStub.prototype.map = function(cb) {
       cb(stub);
       stub.map(cb);
     }
+  });
+};
+
+/**
+ * Recursively copy all files stubs from the source tree, renaming them to reflect
+ * the new root directory.
+ *
+ * @param {string} name New full path.
+ */
+FileStub.prototype.copyTree = function(newName) {
+  var oldName = this.get('name');
+  this.map(function(stub) {
+    var oldChildName = stub.get('name');
+    var newChildName = stub.get('name').replace(oldName, newName);
+    fileStubMap[newChildName] = fileStubMap[oldChildName];
+    fileStubMap[newChildName].set('name', newChildName);
+    fileStubMap[newChildName].make();
   });
 };
 
