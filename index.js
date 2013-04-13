@@ -98,21 +98,24 @@ mixin.restoreFs = function() {
  * @param {string} newPath
  */
 customFsStub.renameSync = function(oldPath, newPath) {
+  console.log('SINON-DOUBLIST-FS', 'rename', oldPath, 'to', newPath);
   fileStubMap[newPath] = FileStub.clone(fileStubMap[oldPath]);
   fileStubMap[newPath].set('name', newPath);
   fileStubMap[newPath].make();
 
-  var parentdir = fileStubMap[newPath].get('parentdir');
+  /*var parentdir = fileStubMap[newPath].get('parentdir');
   var parentStub = fileStubMap[parentdir];
   if (parentStub) {
     var parentReaddir = parentStub.get('readdir');
     var relPath = newPath.replace(parentdir + '/', '');
+    console.log('SINON-DOUBLIST-FS renameSync newPath', newPath, 'parentdir', parentdir, 'relPath', relPath);
     if (-1 === parentReaddir.indexOf(relPath)) {
+      console.log('SINON-DOUBLIST-FS renameSync adding', relPath, 'to parent readdir');
       parentReaddir.push(relPath);
       parentStub.set('readdir', parentReaddir);
       parentStub.make();
     }
-  }
+  }*/
 
   fileStubMap[oldPath].copyTree(newPath);
   fileStubMap[oldPath].unlink();
@@ -239,12 +242,15 @@ FileStub.prototype.map = function(cb) {
  */
 FileStub.prototype.copyTree = function(newName) {
   var oldName = this.get('name');
+  console.log('SINON-DOUBLIST-FS', 'copyTree', oldName, 'to', newName);
   this.map(function(stub) {
     var oldChildName = stub.get('name');
     var newChildName = stub.get('name').replace(oldName, newName);
-    fileStubMap[newChildName] = fileStubMap[oldChildName];
-    fileStubMap[newChildName].set('name', newChildName);
-    fileStubMap[newChildName].make();
+    console.log('SINON-DOUBLIST-FS', 'copyTree iter', oldChildName, 'to', newChildName);
+    //fileStubMap[newChildName] = fileStubMap[oldChildName];
+    //fileStubMap[newChildName].set('name', newChildName);
+    //fileStubMap[newChildName].make();
+    customFsStub.renameSync(oldChildName, newChildName);
   });
 };
 
@@ -264,10 +270,13 @@ FileStub.prototype.readdir = function(paths) {
     throw new Error('invalid readdir config: ' + JSON.stringify(paths));
   }
 
+  var name = this.get('name');
   if (isArray && is.object(paths[0])) {
     var relPaths = [];
-    var parentName = this.get('name');
     paths.forEach(function(stub) {
+      var parentName = stub.get('name').replace(/(.*)\/[^/]+$/, '$1');
+      console.log('SINON-DOUBLIST-FS', 'readdir of', name, 'setting parentdir to', parentName, 'for', stub.get('name'));
+      console.log('SINON-DOUBLIST-FS', 'readdir of', name, 'adding child', stub.get('name').replace(parentName + '/', ''));
       relPaths.push(stub.get('name').replace(parentName + '/', ''));
       stub.set('parentdir', parentName);
       stub.make();
@@ -299,6 +308,8 @@ FileStub.prototype.stat = function(key, val) {
  */
 FileStub.prototype.make = function() {
   var name = this.get('name');
+  console.log('SINON-DOUBLIST-FS', 'make', name);
+  console.log('SINON-DOUBLIST-FS', 'make w/ readdir', this.get('readdir'));
 
   fileStubMap[name] = this; // For later lookup in fake writeFile, etc.
 
@@ -338,6 +349,7 @@ FileStub.prototype.make = function() {
  */
 FileStub.prototype.unlink = function() {
   var name = this.get('name');
+  console.log('SINON-DOUBLIST-FS', 'unlink', name);
   var fsStub = this.get('fsStub');
   var parentdir = this.get('parentdir');
   var relPath = name.replace(parentdir + '/', '');
@@ -345,6 +357,7 @@ FileStub.prototype.unlink = function() {
   var parentStub = fileStubMap[parentdir];
   if (parentStub) {
     var parentReaddir = parentStub.get('readdir');
+    console.log('SINON-DOUBLIST-FS unlink', name, 'removing', relPath, 'from parent readdir');
     parentReaddir.splice(parentReaddir.indexOf(relPath), 1);
     parentStub.set('readdir', parentReaddir);
     parentStub.make();
@@ -364,10 +377,18 @@ FileStub.prototype.unlink = function() {
   delete fileStubMap[name];
 
   var readdir = this.get('readdir');
+  console.log('SINON-DOUBLIST-FS', name, 'unlink, readdir.length', readdir.length);
   if (readdir) {
     readdir.forEach(function(relPath) {
-      name = name + '/' + relPath;
-      fileStubMap[name].unlink();
+      console.log('SINON-DOUBLIST-FS', name, 'child readdir entry', relPath);
+      var childName = name + '/' + relPath;
+      var childStub = fileStubMap[childName];
+      if (childStub) {
+        console.log('SINON-DOUBLIST-FS', name, 'unlink child', childName);
+        fileStubMap[childName].unlink();
+      } else {
+        console.log('SINON-DOUBLIST-FS', name, 'unlink, no stub for child', childName);
+      }
     });
   }
 };
