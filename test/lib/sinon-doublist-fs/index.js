@@ -11,6 +11,8 @@ var sinonDoublistFs = sdfs.sinonDoublistFs;
 var sinonDoublist = sdfs.requireComponent('sinon-doublist');
 var Batch = sdfs.requireComponent('batch');
 
+sdfs.log = true;
+
 describe('sinon-doublist-fs', function() {
   'use strict';
 
