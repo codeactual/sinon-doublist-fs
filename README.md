@@ -72,13 +72,13 @@ Writes can also be made via `.buffer()` described in the API section.
 
 ## Installation
 
-### [Component](https://github.com/component/component)
-
-    $ component install codeactual/sinon-doublist-fs
-
 ### [NPM](https://npmjs.org/package/sinon-doublist-fs)
 
     npm install sinon-doublist-fs
+
+### API only w/ [Component](https://github.com/component/component)
+
+    $ component install codeactual/sinon-doublist-fs
 
 ## API
 
