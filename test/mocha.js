@@ -10,7 +10,7 @@ var sinonDoublistFs = sdfs.sinonDoublistFs;
 var sinonDoublist = sdfs.requireComponent('sinon-doublist');
 
 sinonDoublist(sinon, 'mocha');
-sinonDoublistFs(fs, 'mocha');
+sinonDoublistFs('mocha');
 
 describe('sinon-doublist-fs global injection for mocha', function() {
   'use strict';

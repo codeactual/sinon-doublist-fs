@@ -16,7 +16,7 @@ describe('sinon-doublist-fs', function() {
 
   beforeEach(function(hookDone) {
     sinonDoublist(sinon, this);
-    sinonDoublistFs(fs, this);
+    sinonDoublistFs(this);
     this.paths = ['/foo', '/bar'];
     this.strings = ['walking', 'dead'];
     this.buffers = [new Buffer(this.strings[0]), new Buffer(this.strings[1])];
