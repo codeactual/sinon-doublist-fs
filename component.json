@@ -21,8 +21,9 @@
   "development": {
     "visionmedia/batch": "0.3.2"
   },
+  "main": "lib/sinon-doublist-fs/index.js",
   "scripts": [
-    "index.js"
+    "lib/sinon-doublist-fs/index.js"
   ],
   "license": "MIT"
 }

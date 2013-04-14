@@ -1,20 +1,24 @@
 /*jshint expr:true*/
 var sinon = require('sinon');
 var chai = require('chai');
-var sinonDoublistFs = require('../dist/sinon-doublist-fs.js');
-var sinonDoublist = sinonDoublistFs.require('sinon-doublist');
-var Batch = sinonDoublistFs.require('batch');
 var fs = require('fs');
 
 var should = chai.should();
 chai.Assertion.includeStack = true;
+
+var sdfs = require('../../..');
+var sinonDoublistFs = sdfs.sinonDoublistFs;
+var sinonDoublist = sdfs.requireComponent('sinon-doublist');
+var Batch = sdfs.requireComponent('batch');
+
+sdfs.log = true;
 
 describe('sinon-doublist-fs', function() {
   'use strict';
 
   beforeEach(function(hookDone) {
     sinonDoublist(sinon, this);
-    sinonDoublistFs(fs, this);
+    sinonDoublistFs(this);
     this.paths = ['/foo', '/bar'];
     this.strings = ['walking', 'dead'];
     this.buffers = [new Buffer(this.strings[0]), new Buffer(this.strings[1])];

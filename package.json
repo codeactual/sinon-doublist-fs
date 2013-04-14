@@ -2,6 +2,7 @@
   "name": "sinon-doublist-fs",
   "description": "node.js `fs` stubbing mixin for sinon-doublist",
   "version": "0.1.2",
+  "main": "index.js",
   "keywords": [
     "sinon",
     "test",
@@ -24,19 +25,19 @@
     "type": "git",
     "url": "https://github.com/codeactual/sinon-doublist-fs.git"
   },
-  "dependencies": {
-    "component": "~0.13.2"
+  "peerDependencies": {
+    "sinon": "~1.6.0"
   },
   "devDependencies": {
     "chai": "~1.5.0",
+    "component": "~0.13.2",
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-shell": "~0.2.2",
-    "mocha": "~1.9.0",
-    "sinon": "~1.6.0"
+    "mocha": "~1.9.0"
   },
   "scripts": {
-    "test": "grunt build && mocha --async-only --reporter spec test/main.js; mocha --async-only --reporter spec test/mocha.js"
+    "test": "grunt build && mocha --async-only --reporter spec test/mocha.js; mocha --async-only --recursive --reporter spec test/lib"
   }
 }
