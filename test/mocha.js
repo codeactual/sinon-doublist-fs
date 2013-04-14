@@ -1,16 +1,7 @@
-var sinon = require('sinon');
-var chai = require('chai');
-var fs = require('fs');
+var T = require('../..');
 
-var should = chai.should();
-chai.Assertion.includeStack = true;
-
-var sdfs = require('..');
-var sinonDoublistFs = sdfs.sinonDoublistFs;
-var sinonDoublist = require('sinon-doublist').sinonDoublist;
-
-sinonDoublist(sinon, 'mocha');
-sinonDoublistFs('mocha');
+T.sinonDoublist(T.sinon, 'mocha');
+T.sinonDoublistFs('mocha');
 
 describe('sinon-doublist-fs global injection for mocha', function() {
   'use strict';
