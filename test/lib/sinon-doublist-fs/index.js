@@ -1,13 +1,15 @@
 /*jshint expr:true*/
 var sinon = require('sinon');
 var chai = require('chai');
-var sinonDoublistFs = require('../dist/sinon-doublist-fs.js');
-var sinonDoublist = sinonDoublistFs.require('sinon-doublist');
-var Batch = sinonDoublistFs.require('batch');
 var fs = require('fs');
 
 var should = chai.should();
 chai.Assertion.includeStack = true;
+
+var sdfs = require('../../..');
+var sinonDoublistFs = sdfs.sinonDoublistFs;
+var sinonDoublist = sdfs.requireComponent('sinon-doublist');
+var Batch = sdfs.requireComponent('batch');
 
 describe('sinon-doublist-fs', function() {
   'use strict';

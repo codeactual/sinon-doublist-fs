@@ -74,13 +74,11 @@ Writes can also be made via `.buffer()` described in the API section.
 
 ### [Component](https://github.com/component/component)
 
-Install to `components/`:
-
     $ component install codeactual/sinon-doublist-fs
 
-Build standalone file in `build/`:
+### [NPM](https://npmjs.org/package/sinon-doublist-fs)
 
-    $ make dist
+    npm install sinon-doublist-fs
 
 ## API
 
@@ -146,6 +144,7 @@ Omit trailing slashes from path strings.
 
 * Add `fs.renameSync` stub.
 * Add `FileStub#unlink`.
+* Fix NPM compatibility.
 
 ### 0.1.2
 

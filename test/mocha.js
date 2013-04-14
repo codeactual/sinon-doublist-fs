@@ -1,11 +1,13 @@
 var sinon = require('sinon');
 var chai = require('chai');
-var sinonDoublistFs = require('../dist/sinon-doublist-fs');
-var sinonDoublist = sinonDoublistFs.require('sinon-doublist');
 var fs = require('fs');
 
 var should = chai.should();
 chai.Assertion.includeStack = true;
+
+var sdfs = require('..');
+var sinonDoublistFs = sdfs.sinonDoublistFs;
+var sinonDoublist = sdfs.requireComponent('sinon-doublist');
 
 sinonDoublist(sinon, 'mocha');
 sinonDoublistFs(fs, 'mocha');

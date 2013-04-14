@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     jshint: {
       src: {
         files: {
-          src: ['index.js']
+          src: ['index.js', 'lib/**/*.js']
         }
       },
       grunt: {
@@ -22,7 +22,7 @@ module.exports = function(grunt) {
           expr: true
         },
         files: {
-          src: ['test/*.js']
+          src: ['test/**/*.js']
         }
       },
       json: {
