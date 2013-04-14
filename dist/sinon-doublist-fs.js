@@ -422,8 +422,11 @@
         module.exports = {
             sinonDoublistFs: sinonDoublistFs,
             requireComponent: require,
-            requireNative: null
+            requireNative: null,
+            log: false
         };
+        var fs;
+        var util;
         var is = require("is");
         var bind = require("bind");
         var clone = require("clone");
@@ -431,9 +434,12 @@
         var fileStubMap;
         var mixin = {};
         var customFsStub = {};
-        function sinonDoublistFs(fs, test) {
+        function sinonDoublistFs(test) {
+            var requireNative = module.exports.requireNative;
+            fs = requireNative("fs");
+            util = requireNative("util");
             if (is.string(test)) {
-                globalInjector[test](fs);
+                globalInjector[test]();
                 return;
             }
             if (is.Function(fs.exists.restore)) {
@@ -464,6 +470,7 @@
             });
         }
         mixin.stubFile = function(name) {
+            log("stubFile", name);
             if (!is.string(name) || name.trim() === "") {
                 throw new Error("invalid stubFile() name: " + JSON.stringify(name));
             }
@@ -474,7 +481,7 @@
             fileStubMap = null;
         };
         customFsStub.renameSync = function(oldPath, newPath) {
-            console.log("SINON-DOUBLIST-FS", "rename", oldPath, "to", newPath);
+            log("fs#renameSync", "%s to %s", oldPath, newPath);
             fileStubMap[newPath] = FileStub.clone(fileStubMap[oldPath]);
             fileStubMap[newPath].set("name", newPath);
             fileStubMap[newPath].make();
@@ -520,6 +527,7 @@
         }
         configurable(FileStub.prototype);
         FileStub.clone = function(srcStub) {
+            log("FileStub.clone", srcStub.get("name"));
             var dstStub = new FileStub(srcStub.get("fsStub"));
             var simpleObjects = [ "stats" ];
             Object.keys(srcStub.settings).forEach(function(key) {
@@ -542,6 +550,7 @@
             return this;
         };
         FileStub.prototype.map = function(cb) {
+            log("FileStub#map", this.get("name"));
             var readdir = this.get("readdir");
             if (!readdir) {
                 return;
@@ -557,11 +566,11 @@
         };
         FileStub.prototype.copyTree = function(newName) {
             var oldName = this.get("name");
-            console.log("SINON-DOUBLIST-FS", "copyTree", oldName, "to", newName);
+            log("FileStub#copyTree", "%s to %s", oldName, newName);
             this.map(function(stub) {
                 var oldChildName = stub.get("name");
                 var newChildName = stub.get("name").replace(oldName, newName);
-                console.log("SINON-DOUBLIST-FS", "copyTree iter", oldChildName, "to", newChildName);
+                log("FileStub#copyTree", "copy child %s to %s", oldChildName, newChildName);
                 customFsStub.renameSync(oldChildName, newChildName);
             });
         };
@@ -571,13 +580,14 @@
                 throw new Error("invalid readdir config: " + JSON.stringify(paths));
             }
             var name = this.get("name");
+            log("FileStub#readdir", name);
             if (isArray && is.object(paths[0])) {
                 var relPaths = [];
                 paths.forEach(function(stub) {
                     var parentName = stub.get("name").replace(/(.*)\/[^/]+$/, "$1");
-                    console.log("SINON-DOUBLIST-FS", "readdir of", name, "setting parentdir to", parentName, "for", stub.get("name"));
-                    console.log("SINON-DOUBLIST-FS", "readdir of", name, "adding child", stub.get("name").replace(parentName + "/", ""));
-                    relPaths.push(stub.get("name").replace(parentName + "/", ""));
+                    var stubRelPath = stub.get("name").replace(parentName + "/", "");
+                    log("FileStub#readdir", "add child %s with parent %s as %s", stub.get("name"), parentName, stubRelPath);
+                    relPaths.push(stubRelPath);
                     stub.set("parentdir", parentName);
                     stub.make();
                 });
@@ -595,8 +605,6 @@
         };
         FileStub.prototype.make = function() {
             var name = this.get("name");
-            console.log("SINON-DOUBLIST-FS", "make", name);
-            console.log("SINON-DOUBLIST-FS", "make w/ readdir", this.get("readdir"));
             fileStubMap[name] = this;
             var fsStub = this.get("fsStub");
             var stubMany = this.get("sandbox").stubMany;
@@ -607,15 +615,16 @@
             Object.keys(stats).forEach(function(key) {
                 statsObj[key] = stats[key];
             });
-            var paths = this.get("readdir");
-            var isDir = is.array(paths);
+            var readdir = this.get("readdir");
+            var isDir = is.array(readdir);
+            log("FileStub#make", "%s with %d children", name, readdir.length);
             stubMany(statsObj, "isDirectory").isDirectory.returns(isDir);
             stubMany(statsObj, "isFile").isFile.returns(!isDir);
             fsStub.stat.withArgs(this.get("name")).yields(null, statsObj);
             fsStub.statSync.withArgs(this.get("name")).returns(statsObj);
             if (isDir) {
-                fsStub.readdir.withArgs(this.get("name")).yields(null, paths);
-                fsStub.readdirSync.withArgs(this.get("name")).returns(paths);
+                fsStub.readdir.withArgs(this.get("name")).yields(null, readdir);
+                fsStub.readdirSync.withArgs(this.get("name")).returns(readdir);
             } else {
                 var err = new Error("ENOTDIR, not a directory " + name);
                 fsStub.readdir.withArgs(this.get("name")).throws(err);
@@ -624,14 +633,14 @@
         };
         FileStub.prototype.unlink = function() {
             var name = this.get("name");
-            console.log("SINON-DOUBLIST-FS", "unlink", name);
+            log("FileStub#unlink", name);
             var fsStub = this.get("fsStub");
             var parentdir = this.get("parentdir");
             var relPath = name.replace(parentdir + "/", "");
             var parentStub = fileStubMap[parentdir];
             if (parentStub) {
                 var parentReaddir = parentStub.get("readdir");
-                console.log("SINON-DOUBLIST-FS unlink", name, "removing", relPath, "from parent readdir");
+                log("FileStub#unlink", "removing %s from parent readdir", relPath);
                 parentReaddir.splice(parentReaddir.indexOf(relPath), 1);
                 parentStub.set("readdir", parentReaddir);
                 parentStub.make();
@@ -647,25 +656,23 @@
             fsStub.readdirSync.withArgs(name).throws(err);
             delete fileStubMap[name];
             var readdir = this.get("readdir");
-            console.log("SINON-DOUBLIST-FS", name, "unlink, readdir.length", readdir.length);
             if (readdir) {
                 readdir.forEach(function(relPath) {
-                    console.log("SINON-DOUBLIST-FS", name, "child readdir entry", relPath);
                     var childName = name + "/" + relPath;
                     var childStub = fileStubMap[childName];
                     if (childStub) {
-                        console.log("SINON-DOUBLIST-FS", name, "unlink child", childName);
+                        log("FileStub#unlink", "unlinked child %s", relPath);
                         fileStubMap[childName].unlink();
                     } else {
-                        console.log("SINON-DOUBLIST-FS", name, "unlink, no stub for child", childName);
+                        log("FileStub#unlink", "no stub for child %s", relPath);
                     }
                 });
             }
         };
         var globalInjector = {
-            mocha: function(fs) {
+            mocha: function() {
                 beforeEach(function(hookDone) {
-                    sinonDoublistFs(fs, this);
+                    sinonDoublistFs(this);
                     hookDone();
                 });
                 afterEach(function(hookDone) {
@@ -674,6 +681,12 @@
                 });
             }
         };
+        function log(source) {
+            if (!module.exports.log) {
+                return;
+            }
+            console.log("sinonDoublistFs", source, util.format.apply(util, [].slice.call(arguments, 1)));
+        }
     });
     require.alias("codeactual-is/index.js", "sinon-doublist-fs/deps/is/index.js");
     require.alias("manuelstofer-each/index.js", "codeactual-is/deps/each/index.js");

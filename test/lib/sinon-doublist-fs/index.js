@@ -8,7 +8,7 @@ chai.Assertion.includeStack = true;
 
 var sdfs = require('../../..');
 var sinonDoublistFs = sdfs.sinonDoublistFs;
-var sinonDoublist = sdfs.requireComponent('sinon-doublist');
+var sinonDoublist = require('sinon-doublist').sinonDoublist;
 var Batch = sdfs.requireComponent('batch');
 
 sdfs.log = true;
