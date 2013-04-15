@@ -84,6 +84,10 @@ describe('FileStub', function() {
 
     it('should create file stubs when passed string array', function(testDone) {
       console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      this.stubFile(this.paths[0]).readdir(this.paths).make();
+      this.paths.forEach(function(path) {
+        fs.existsSync(path).should.equal(true);
+      });
     });
 
     it('should fill in missing intermediate dirs in string array', function(testDone) {
