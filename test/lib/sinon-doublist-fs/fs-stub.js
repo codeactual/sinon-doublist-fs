@@ -61,7 +61,7 @@ describe('fs stub', function() {
   });
 
   describe('#renameSync()', function() {
-    it('should add to stub map with file source', function(testDone) {
+    it('should transpose parent readdir item', function(testDone) {
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a')
       ]).make();
@@ -78,7 +78,7 @@ describe('fs stub', function() {
       testDone();
     });
 
-    it('should overwrite stub map entry with file source', function(testDone) {
+    it('should overwrite parent readdir item', function(testDone) {
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a'),
         this.stubFile(this.paths[0] + '/b')
@@ -96,7 +96,7 @@ describe('fs stub', function() {
       testDone();
     });
 
-    it('should add to stub map with dir source', function(testDone) {
+    it('should retain own readdir list', function(testDone) {
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a').readdir([
           this.stubFile(this.paths[0] + '/a/c')
@@ -117,7 +117,7 @@ describe('fs stub', function() {
       testDone();
     });
 
-    it('should overwrite stub map entry with dir source', function(testDone) {
+    it('should retain own readdir list after overwrite', function(testDone) {
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a').readdir([
           this.stubFile(this.paths[0] + '/a/c')
@@ -139,6 +139,31 @@ describe('fs stub', function() {
 
       fs.readdirSync(this.paths[0] + '/b').should.deep.equal(['c']);
       testDone();
+    });
+
+    it('should update parent name of children', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should retain child meta', function(testDone) {
+      // name
+      // parent name (should be the parent's new name)
+      // size
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should update meta', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      // name
+      // parent name
+      // size
+    });
+
+    it('should update after overwrite', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      // name
+      // parent name
+      // size
     });
   });
 });
