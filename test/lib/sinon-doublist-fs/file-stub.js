@@ -83,15 +83,37 @@ describe('FileStub', function() {
     });
 
     it('should create file stubs when passed string array', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
       this.stubFile(this.paths[0]).readdir(this.paths).make();
       this.paths.forEach(function(path) {
         fs.existsSync(path).should.equal(true);
+        testDone();
       });
     });
 
     it('should fill in missing intermediate dirs in string array', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      var incomplete = [
+        '/root',
+        '/root/d1/d2/f1.js',
+        '/root/d1/d2/d3/d4/f2.js'
+      ];
+      var complete = [
+        '/root',
+        '/root/d1',
+        '/root/d1/d2',
+        '/root/d1/d2/d3',
+        '/root/d1/d2/d3/d4',
+        '/root/d1/d2/f1.js',
+        '/root/d1/d2/d3/d4/f2.js'
+      ];
+      this.stubTree(incomplete);
+      complete.forEach(function(path) {
+        fs.existsSync(path).should.equal(true);
+      });
+      fs.readdirSync('/root').should.deep.equal(['d1']);
+      fs.readdirSync('/root/d1').should.deep.equal(['d2']);
+      fs.readdirSync('/root/d1/d2').should.deep.equal(['f1.js', 'd3']);
+      fs.readdirSync('/root/d1/d2/d3/d4').should.deep.equal(['f2.js']);
+      testDone();
     });
 
     it('should stub isFile/isDirectory when passed string array', function(testDone) {
