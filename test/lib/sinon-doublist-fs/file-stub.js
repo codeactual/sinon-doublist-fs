@@ -66,7 +66,7 @@ describe('FileStub', function() {
   });
 
   describe('readdir()', function() {
-    it('should set fs.readdir() contents when passed array', function(testDone) {
+    it('should set fs.readdir() contents when passed string array', function(testDone) {
       var self = this;
       this.stubFile(this.paths[0]).readdir(this.paths).make();
       fs.readdir(this.paths[0], function(err, paths) {
@@ -76,13 +76,21 @@ describe('FileStub', function() {
       });
     });
 
-    it('should set fs.readdirSync() contents when passed array', function(testDone) {
+    it('should set fs.readdirSync() contents when passed string array', function(testDone) {
       this.stubFile(this.paths[0]).readdir(this.paths).make();
       fs.readdirSync(this.paths[0]).should.deep.equal(this.paths);
       testDone();
     });
 
-    it('should stub isFile/isDirectory when passed array', function(testDone) {
+    it('should create file stubs when passed string array', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should fill in missing intermediate dirs in string array', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should stub isFile/isDirectory when passed string array', function(testDone) {
       this.stubFile(this.paths[0]).make(); // Without paths.
       var stats = fs.statSync(this.paths[0]);
       stats.isDirectory().should.equal(false);
