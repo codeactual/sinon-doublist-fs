@@ -25,9 +25,15 @@ describe('FileStub', function() {
         fs.existsSync(path).should.equal(true);
       });
       fs.readdirSync('/root').should.deep.equal(['d1']);
+      fs.statSync('/root').isDirectory().should.deep.equal(true);
       fs.readdirSync('/root/d1').should.deep.equal(['d2']);
+      fs.statSync('/root/d1').isDirectory().should.deep.equal(true);
       fs.readdirSync('/root/d1/d2').should.deep.equal(['f1.js', 'd3']);
+      fs.statSync('/root/d1/d2').isDirectory().should.deep.equal(true);
+      fs.statSync('/root/d1/d2/f1.js').isDirectory().should.deep.equal(false);
       fs.readdirSync('/root/d1/d2/d3/d4').should.deep.equal(['f2.js']);
+      fs.statSync('/root/d1/d2/d3/d4').isDirectory().should.deep.equal(true);
+      fs.statSync('/root/d1/d2/d3/d4/f2.js').isDirectory().should.deep.equal(false);
       testDone();
     });
   });
