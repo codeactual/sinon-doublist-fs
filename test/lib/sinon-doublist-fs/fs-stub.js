@@ -5,7 +5,7 @@ var should = T.should;
 var Batch = T.Batch;
 
 describe('fs stub', function() {
-  describe('#exists()', function() {
+  describe('#exists', function() {
     it('should detect stub', function(testDone) {
       var self = this;
       var batch = new Batch();
@@ -27,7 +27,7 @@ describe('fs stub', function() {
     });
   });
 
-  describe('#existsSync()', function() {
+  describe('#existsSync', function() {
     it('should detect stub', function(testDone) {
       should.equal(fs.existsSync(this.paths[0]), false);
       should.equal(fs.existsSync(this.paths[1]), false);
@@ -39,7 +39,7 @@ describe('fs stub', function() {
     });
   });
 
-  describe('#writeFile()', function() {
+  describe('#writeFile', function() {
     it('should update fake file map', function(testDone) {
       var self = this;
       this.stubFile(this.paths[0]).make();
@@ -51,7 +51,7 @@ describe('fs stub', function() {
     });
   });
 
-  describe('#writeFileSync()', function() {
+  describe('#writeFileSync', function() {
     it('should update fake file map', function(testDone) {
       this.stubFile(this.paths[0]).make();
       fs.writeFileSync(this.paths[0], this.strings[0]);
@@ -60,7 +60,42 @@ describe('fs stub', function() {
     });
   });
 
-  describe('#renameSync()', function() {
+  describe('#unlink', function() {
+    it('should remove itself from parent readdir', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should update #existsSync result', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should remove itself from stub map', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should call unlink on child stubs', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+  });
+
+  describe('#renameSync', function() {
+    it('should not break gitemplate', function(testDone) {
+      this.stubFile('/dst').readdir([
+        this.stubFile('/dst/bin').readdir([
+          this.stubFile('/dst/bin/gitemplate_m1')
+        ]),
+        this.stubFile('/dst/lib').readdir([
+          this.stubFile('/dst/lib/gitemplate_m2').readdir([
+            this.stubFile('/dst/lib/gitemplate_m2/index.js')
+          ])
+        ])
+      ]).make();
+      //var spy = this.spy(shelljs, 'mv');
+      //var res = this.gt.replaceNameVars();
+      //spy.args[0].should.deep.equal(['/dst/lib/gitemplate_m2', '/dst/lib/v2']);
+      //spy.args[1].should.deep.equal(['/dst/bin/gitemplate_m1', '/dst/bin/v1']);
+    });
+
     it('should transpose parent readdir item', function(testDone) {
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a')

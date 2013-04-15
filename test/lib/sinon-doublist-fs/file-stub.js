@@ -4,7 +4,7 @@ var fs = T.fs;
 var should = T.should;
 
 describe('FileStub', function() {
-  describe('stubTree()', function() {
+  describe('#stubTree', function() {
     it('should fill in missing intermediate dirs', function(testDone) {
       var incomplete = [
         '/root',
@@ -38,7 +38,7 @@ describe('FileStub', function() {
     });
   });
 
-  describe('FileStub()', function() {
+  describe('#FileStub', function() {
     it('should pass defaults to fs.statsSync', function(testDone) {
       this.stubFile(this.paths[0]).make();
       assertDefaultsMatch(fs.statSync(this.paths[0]));
@@ -55,7 +55,7 @@ describe('FileStub', function() {
     });
   });
 
-  describe('stat()', function() {
+  describe('#stat', function() {
     it('should set stats property', function(testDone) {
       this.stubFile(this.paths[0]).stat('size', 1).stat('gid', 1000).make();
       fs.statSync(this.paths[0]).size.should.equal(1);
@@ -69,7 +69,7 @@ describe('FileStub', function() {
     });
   });
 
-  describe('buffer()', function() {
+  describe('#buffer', function() {
     it('should set readFileSync output from string', function(testDone) {
       this.stubFile(this.paths[0]).buffer(this.strings[0]).make();
       fs.readFileSync(this.paths[0]).toString().should.equal(this.strings[0]);
@@ -99,7 +99,7 @@ describe('FileStub', function() {
     });
   });
 
-  describe('readdir()', function() {
+  describe('#readdir', function() {
     it('should stub readdirSync when passed false', function(testDone) {
       var self = this;
       this.stubFile(this.paths[0]).readdir(false).make();
