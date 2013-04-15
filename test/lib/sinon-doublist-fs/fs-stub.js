@@ -60,7 +60,6 @@ describe('fs stub', function() {
     });
   });
 
-
   describe('#renameSync()', function() {
     it('should add to stub map with file source', function(testDone) {
       this.stubFile(this.paths[0]).readdir([
