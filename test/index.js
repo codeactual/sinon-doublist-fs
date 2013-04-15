@@ -7,7 +7,6 @@ T.should = chai.should();
 chai.Assertion.includeStack = true;
 
 var sdfs = require('..');
-sdfs.log = true;
 
 T.sinonDoublistFs = sdfs.sinonDoublistFs;
 T.sinonDoublist = require('sinon-doublist').sinonDoublist;
