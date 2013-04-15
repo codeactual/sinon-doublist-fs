@@ -90,10 +90,10 @@ describe('fs stub', function() {
           ])
         ])
       ]).make();
-      //var spy = this.spy(shelljs, 'mv');
-      //var res = this.gt.replaceNameVars();
-      //spy.args[0].should.deep.equal(['/dst/lib/gitemplate_m2', '/dst/lib/v2']);
-      //spy.args[1].should.deep.equal(['/dst/bin/gitemplate_m1', '/dst/bin/v1']);
+      fs.renameSync('/dst/lib/gitemplate_m2', '/dst/lib/v2');
+      var stat = fs.statSync('/dst/lib/v2/index.js'); // throws 'No such' in gitemplate
+      stat.isFile().should.equal(true);
+      testDone();
     });
 
     it('should transpose parent readdir item', function(testDone) {
