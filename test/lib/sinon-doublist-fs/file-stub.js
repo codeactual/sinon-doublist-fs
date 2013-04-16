@@ -24,6 +24,7 @@ describe('FileStub', function() {
       complete.forEach(function(path) {
         fs.existsSync(path).should.equal(true);
       });
+      fs.readdirSync('/').should.deep.equal(['root']);
       fs.readdirSync('/root').should.deep.equal(['d1']);
       fs.statSync('/root').isDirectory().should.deep.equal(true);
       fs.readdirSync('/root/d1').should.deep.equal(['d2']);
