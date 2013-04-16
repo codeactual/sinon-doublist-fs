@@ -167,7 +167,7 @@ describe('fs stub', function() {
       fs.existsSync(this.paths[0] + '/b').should.equal(true);
       fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
 
-      fs.readdirSync(this.paths[0] + '/b').should.deep.equal(['c']);
+      fs.readdirSync(this.paths[0] + '/b').should.deep.equal(['d']);
       testDone();
     });
 
