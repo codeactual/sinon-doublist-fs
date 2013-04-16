@@ -62,25 +62,25 @@ describe('fs stub', function() {
 
   describe('#unlink', function() {
     it('should remove itself from parent readdir', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
     });
 
     it('should update #existsSync result', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
     });
 
     it('should remove itself from stub map', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
     });
 
     it('should call unlink on child stubs', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
     });
   });
 
   describe('#renameSync', function() {
     it('should copy readFile buffers', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
     });
 
     it('should rename copied dir descendants', function(testDone) {
@@ -176,25 +176,25 @@ describe('fs stub', function() {
     });
 
     it('should update parent name of children', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
     });
 
     it('should retain child meta', function(testDone) {
       // name
       // parent name (should be the parent's new name)
       // size
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
     });
 
     it('should update meta', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
       // name
       // parent name
       // size
     });
 
     it('should update after overwrite', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
       // name
       // parent name
       // size

@@ -54,6 +54,12 @@ module.exports = function(grunt) {
       },
       dist: {
         command: 'component build --standalone sinonDoublistFs --name sinon-doublist-fs --out dist'
+      },
+      test_lib: {
+        command: 'mocha --colors --async-only --recursive --reporter spec test/lib'
+      },
+      test_mocha: {
+        command: 'mocha --colors --async-only --reporter spec test/mocha.js'
       }
     }
   });
@@ -61,4 +67,5 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['jshint']);
   grunt.registerTask('build', ['default', 'shell:build']);
   grunt.registerTask('dist', ['default', 'shell:dist', 'uglify:dist']);
+  grunt.registerTask('test', ['default', 'shell:test_lib', 'shell:test_mocha']);
 };
