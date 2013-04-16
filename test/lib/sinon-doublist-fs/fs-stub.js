@@ -79,20 +79,15 @@ describe('fs stub', function() {
   });
 
   describe('#renameSync', function() {
-    it('should not break gitemplate', function(testDone) {
-      this.stubFile('/dst').readdir([
-        this.stubFile('/dst/bin').readdir([
-          this.stubFile('/dst/bin/gitemplate_m1')
-        ]),
-        this.stubFile('/dst/lib').readdir([
-          this.stubFile('/dst/lib/gitemplate_m2').readdir([
-            this.stubFile('/dst/lib/gitemplate_m2/index.js')
-          ])
+    it('should rename copied dir descendants', function(testDone) {
+      this.stubFile('/root').readdir([
+        this.stubFile('/root/a').readdir([
+          this.stubFile('/root/a/index.js')
         ])
       ]).make();
-      fs.renameSync('/dst/lib/gitemplate_m2', '/dst/lib/v2');
-      var stat = fs.statSync('/dst/lib/v2/index.js'); // throws 'No such' in gitemplate
-      stat.isFile().should.equal(true);
+      fs.renameSync('/root/a', '/root/b');
+      fs.existsSync('/root/a/index.js').should.equal(false);
+      fs.statSync('/root/b/index.js').isFile().should.equal(true);
       testDone();
     });
 
