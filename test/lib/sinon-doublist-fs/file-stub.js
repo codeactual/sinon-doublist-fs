@@ -38,7 +38,7 @@ describe('FileStub', function() {
     });
   });
 
-  describe('#FileStub', function() {
+  describe('#make', function() {
     it('should pass defaults to fs.statsSync', function(testDone) {
       this.stubFile(this.paths[0]).make();
       assertDefaultsMatch(fs.statSync(this.paths[0]));
@@ -52,6 +52,14 @@ describe('FileStub', function() {
         assertDefaultsMatch(stats);
         testDone();
       });
+    });
+
+    it('should init parent name', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should init readdir', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
     });
   });
 
@@ -117,7 +125,23 @@ describe('FileStub', function() {
       testDone();
     });
 
-    it('should accept array of FileStub objects to support trees', function(testDone) {
+    it('should update readdir from path string array', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should init parent names from path string array', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should update readdir from FileStub array', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should init parent names from FileStub array', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
+    it('should update stub map from FileStub array', function(testDone) {
       /**
        * Create this tree:
        *
