@@ -79,6 +79,10 @@ describe('fs stub', function() {
   });
 
   describe('#renameSync', function() {
+    it('should copy readFile buffers', function(testDone) {
+      console.log('\x1B[33m<---------- INCOMPLETE'); testDone(); // TODO
+    });
+
     it('should rename copied dir descendants', function(testDone) {
       this.stubFile('/root').readdir([
         this.stubFile('/root/a').readdir([
