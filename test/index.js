@@ -14,7 +14,7 @@ T.fs = require('fs');
 T.Batch = sdfs.requireComponent('batch');
 
 beforeEach(function(hookDone) {
-  T.sinonDoublist(T.sinon, this);
+  T.sinonDoublist(this);
   T.sinonDoublistFs(this);
   this.paths = ['/foo', '/bar'];
   this.strings = ['walking', 'dead'];
