@@ -417,27 +417,78 @@
             }
         }
     });
+    require.register("component-each/index.js", function(exports, require, module) {
+        var type = require("type");
+        var has = Object.prototype.hasOwnProperty;
+        module.exports = function(obj, fn) {
+            switch (type(obj)) {
+              case "array":
+                return array(obj, fn);
+
+              case "object":
+                if ("number" == typeof obj.length) return array(obj, fn);
+                return object(obj, fn);
+
+              case "string":
+                return string(obj, fn);
+            }
+        };
+        function string(obj, fn) {
+            for (var i = 0; i < obj.length; ++i) {
+                fn(obj.charAt(i), i);
+            }
+        }
+        function object(obj, fn) {
+            for (var key in obj) {
+                if (has.call(obj, key)) {
+                    fn(key, obj[key]);
+                }
+            }
+        }
+        function array(obj, fn) {
+            for (var i = 0; i < obj.length; ++i) {
+                fn(obj[i], i);
+            }
+        }
+    });
     require.register("sinon-doublist-fs/lib/sinon-doublist-fs/index.js", function(exports, require, module) {
         "use strict";
         module.exports = {
             sinonDoublistFs: sinonDoublistFs,
             requireComponent: require,
             requireNative: null,
-            log: false
+            trace: false
         };
         var fs;
+        var path;
         var util;
+        var nodeConsole;
         var is = require("is");
         var bind = require("bind");
         var clone = require("clone");
+        var each = require("each");
         var configurable = require("configurable.js");
         var fileStubMap;
         var mixin = {};
         var customFsStub = {};
+        var log;
+        var sandbox;
+        var fsStub;
         function sinonDoublistFs(test) {
             var requireNative = module.exports.requireNative;
             fs = requireNative("fs");
+            path = requireNative("path");
             util = requireNative("util");
+            if (module.exports.trace) {
+                nodeConsole = requireNative("codeactual-node-console").create();
+                log = nodeConsole.set("time", false).set("traceDepth", true).create(null, console.log);
+                nodeConsole.traceMethods("FileStub", FileStub, log, null, /^prototype$/);
+                nodeConsole.traceMethods("FileStub", FileStub.prototype, log, null, /^(get|set)$/);
+                nodeConsole.traceMethods("customFsStub", customFsStub, log);
+                nodeConsole.traceMethods("mixin", mixin, log);
+            } else {
+                log = function() {};
+            }
             if (is.string(test)) {
                 globalInjector[test]();
                 return;
@@ -445,46 +496,59 @@
             if (is.Function(fs.exists.restore)) {
                 return;
             }
-            Object.keys(mixin).forEach(function(method) {
+            each(mixin, function(method) {
                 test[method] = bind(test, mixin[method]);
             });
+            fsStub = test.stub(fs);
+            fsStub.Stats.restore();
+            fsStub.exists.callsArgWith(1, false);
+            fsStub.existsSync.returns(false);
+            each(customFsStub, function(method) {
+                fsStub[method].restore();
+                fsStub[method] = test.stub(fs, method, customFsStub[method]);
+            });
             fileStubMap = {};
-            Object.defineProperty(test, "fsStub", {
-                value: test.stub(fs),
-                enumerable: false,
-                configurable: false,
-                writable: true
-            });
-            Object.defineProperty(test, "fileStubMap", {
-                value: fileStubMap,
-                enumerable: false,
-                configurable: false,
-                writable: true
-            });
-            test.fsStub.Stats.restore();
-            test.fsStub.exists.callsArgWith(1, false);
-            test.fsStub.existsSync.returns(false);
-            Object.keys(customFsStub).forEach(function(method) {
-                test.fsStub[method].restore();
-                test.fsStub[method] = test.stub(fs, method, customFsStub[method]);
-            });
+            sandbox = test;
         }
         mixin.stubFile = function(name) {
-            log("stubFile", name);
+            log("name: %s", name);
             if (!is.string(name) || name.trim() === "") {
                 throw new Error("invalid stubFile() name: " + JSON.stringify(name));
             }
-            var fileStub = new FileStub(this.fsStub);
-            return fileStub.set("name", name).set("sandbox", this);
+            var fileStub = new FileStub();
+            return fileStub.set("name", name);
+        };
+        mixin.stubTree = function(paths) {
+            var self = this;
+            paths = intermediatePaths(paths);
+            each(paths, function(name, readdir) {
+                self.stubFile(name).readdir(readdir.length ? readdir : false).set("parentName", path.dirname(name)).make();
+            });
         };
         mixin.restoreFs = function() {
             fileStubMap = null;
         };
         customFsStub.renameSync = function(oldPath, newPath) {
-            log("fs#renameSync", "%s to %s", oldPath, newPath);
-            fileStubMap[newPath] = FileStub.clone(fileStubMap[oldPath]);
-            fileStubMap[newPath].set("name", newPath);
-            fileStubMap[newPath].make();
+            var oldPathStub = fileStubMap[oldPath];
+            var parentName = path.dirname(newPath);
+            var newPathExists = false;
+            if (!fileStubMap[newPath]) {
+                fileStubMap[newPath] = new FileStub();
+                fileStubMap[newPath].set("name", newPath).set("parentName", parentName).make();
+                newPathExists = true;
+            }
+            log("%s to %s in parent %s", oldPath, newPath, parentName);
+            var parentStub = fileStubMap[parentName];
+            if (parentStub) {
+                var parentReaddir = parentStub.get("readdir");
+                var relPath = newPath.replace(parentName + "/", "");
+                parentReaddir = parentReaddir || [];
+                if (-1 === parentReaddir.indexOf(relPath)) {
+                    log("add %s to readdir of parent %s", relPath, parentName);
+                    parentReaddir.push(relPath);
+                    parentStub.readdir(parentReaddir);
+                }
+            }
             fileStubMap[oldPath].copyTree(newPath);
             fileStubMap[oldPath].unlink();
         };
@@ -505,9 +569,7 @@
             this.settings = {
                 name: "",
                 readdir: false,
-                parentdir: "",
-                fsStub: fsStub,
-                sandbox: {},
+                parentName: "",
                 stats: {
                     dev: 2114,
                     ino: 48064969,
@@ -526,36 +588,23 @@
             };
         }
         configurable(FileStub.prototype);
-        FileStub.clone = function(srcStub) {
-            log("FileStub.clone", srcStub.get("name"));
-            var dstStub = new FileStub(srcStub.get("fsStub"));
-            var simpleObjects = [ "stats" ];
-            Object.keys(srcStub.settings).forEach(function(key) {
-                if (-1 === simpleObjects.indexOf(key)) {
-                    dstStub.settings[key] = srcStub.settings[key];
-                } else {
-                    dstStub.settings[key] = clone(srcStub.settings[key]);
-                }
-            });
-            return dstStub;
-        };
         FileStub.prototype.buffer = function(buffer) {
             if (is.string(buffer)) {
                 buffer = new Buffer(buffer);
             }
-            var fsStub = this.get("fsStub");
-            fsStub.readFileSync.withArgs(this.get("name")).returns(buffer);
-            fsStub.readFile.withArgs(this.get("name")).yields(null, buffer);
+            var name = this.get("name");
+            fsStub.readFileSync.withArgs(name).returns(buffer);
+            fsStub.readFile.withArgs(name).yields(null, buffer);
             this.stat("size", buffer.length + 1);
             return this;
         };
         FileStub.prototype.map = function(cb) {
-            log("FileStub#map", this.get("name"));
+            var name = this.get("name");
+            log("name: %s", name);
             var readdir = this.get("readdir");
             if (!readdir) {
                 return;
             }
-            var name = this.get("name");
             readdir.forEach(function(relPath) {
                 var stub = fileStubMap[name + "/" + relPath];
                 if (stub) {
@@ -566,11 +615,11 @@
         };
         FileStub.prototype.copyTree = function(newName) {
             var oldName = this.get("name");
-            log("FileStub#copyTree", "%s to %s", oldName, newName);
+            log("%s to %s", oldName, newName);
             this.map(function(stub) {
                 var oldChildName = stub.get("name");
                 var newChildName = stub.get("name").replace(oldName, newName);
-                log("FileStub#copyTree", "copy child %s to %s", oldChildName, newChildName);
+                log("copy child %s to %s", oldChildName, newChildName);
                 customFsStub.renameSync(oldChildName, newChildName);
             });
         };
@@ -580,18 +629,26 @@
                 throw new Error("invalid readdir config: " + JSON.stringify(paths));
             }
             var name = this.get("name");
-            log("FileStub#readdir", name);
-            if (isArray && is.object(paths[0])) {
-                var relPaths = [];
-                paths.forEach(function(stub) {
-                    var parentName = stub.get("name").replace(/(.*)\/[^/]+$/, "$1");
-                    var stubRelPath = stub.get("name").replace(parentName + "/", "");
-                    log("FileStub#readdir", "add child %s with parent %s as %s", stub.get("name"), parentName, stubRelPath);
-                    relPaths.push(stubRelPath);
-                    stub.set("parentdir", parentName);
-                    stub.make();
-                });
-                paths = relPaths;
+            log("name: %s", name);
+            if (isArray) {
+                if (is.object(paths[0])) {
+                    var relPaths = [];
+                    paths.forEach(function(stub) {
+                        var parentName = path.dirname(stub.get("name"));
+                        var stubRelPath = stub.get("name").replace(parentName + "/", "");
+                        log("add child %s with parent %s as %s", stub.get("name"), parentName, stubRelPath);
+                        relPaths.push(stubRelPath);
+                        stub.set("parentName", parentName);
+                        stub.make();
+                    });
+                    paths = relPaths;
+                }
+                fsStub.readdir.withArgs(name).yields(null, paths);
+                fsStub.readdirSync.withArgs(name).returns(paths);
+            } else {
+                var err = new Error("ENOTDIR, not a directory " + name);
+                fsStub.readdir.withArgs(name).throws(err);
+                fsStub.readdirSync.withArgs(name).throws(err);
             }
             return this.set("readdir", paths);
         };
@@ -606,46 +663,33 @@
         FileStub.prototype.make = function() {
             var name = this.get("name");
             fileStubMap[name] = this;
-            var fsStub = this.get("fsStub");
-            var stubMany = this.get("sandbox").stubMany;
+            var stubMany = sandbox.stubMany;
             fsStub.exists.withArgs(name).yields(true);
             fsStub.existsSync.withArgs(name).returns(true);
             var stats = this.get("stats");
             var statsObj = new fsStub.Stats();
-            Object.keys(stats).forEach(function(key) {
+            each(stats, function(key) {
                 statsObj[key] = stats[key];
             });
             var readdir = this.get("readdir");
             var isDir = is.array(readdir);
-            log("FileStub#make", "%s with %d children", name, readdir.length);
+            log("%s with %s children", name, readdir ? JSON.stringify(readdir) : "no");
             stubMany(statsObj, "isDirectory").isDirectory.returns(isDir);
             stubMany(statsObj, "isFile").isFile.returns(!isDir);
-            fsStub.stat.withArgs(this.get("name")).yields(null, statsObj);
-            fsStub.statSync.withArgs(this.get("name")).returns(statsObj);
-            if (isDir) {
-                fsStub.readdir.withArgs(this.get("name")).yields(null, readdir);
-                fsStub.readdirSync.withArgs(this.get("name")).returns(readdir);
-            } else {
-                var err = new Error("ENOTDIR, not a directory " + name);
-                fsStub.readdir.withArgs(this.get("name")).throws(err);
-                fsStub.readdirSync.withArgs(this.get("name")).throws(err);
-            }
+            fsStub.stat.withArgs(name).yields(null, statsObj);
+            fsStub.statSync.withArgs(name).returns(statsObj);
         };
         FileStub.prototype.unlink = function() {
             var name = this.get("name");
-            log("FileStub#unlink", name);
-            var fsStub = this.get("fsStub");
-            var parentdir = this.get("parentdir");
-            var relPath = name.replace(parentdir + "/", "");
-            var parentStub = fileStubMap[parentdir];
+            log("name: %s", name);
+            var parentName = this.get("parentName");
+            var relPath = name.replace(parentName + "/", "");
+            var parentStub = fileStubMap[parentName];
             if (parentStub) {
                 var parentReaddir = parentStub.get("readdir");
-                log("FileStub#unlink", "removing %s from parent readdir", relPath);
+                log("removing %s from parent readdir", relPath);
                 parentReaddir.splice(parentReaddir.indexOf(relPath), 1);
-                parentStub.set("readdir", parentReaddir);
-                parentStub.make();
-                fsStub.readdir.withArgs(parentdir).yields(null, parentReaddir);
-                fsStub.readdirSync.withArgs(parentdir).returns(parentReaddir);
+                parentStub.readdir(parentReaddir);
             }
             fsStub.exists.withArgs(name).yields(false);
             fsStub.existsSync.withArgs(name).returns(false);
@@ -661,10 +705,10 @@
                     var childName = name + "/" + relPath;
                     var childStub = fileStubMap[childName];
                     if (childStub) {
-                        log("FileStub#unlink", "unlinked child %s", relPath);
+                        log("unlinked child %s", relPath);
                         fileStubMap[childName].unlink();
                     } else {
-                        log("FileStub#unlink", "no stub for child %s", relPath);
+                        log("no stub for child %s", relPath);
                     }
                 });
             }
@@ -681,11 +725,45 @@
                 });
             }
         };
-        function log(source) {
-            if (!module.exports.log) {
-                return;
-            }
-            console.log("sinonDoublistFs", source, util.format.apply(util, [].slice.call(arguments, 1)));
+        function intermediatePaths(sparse) {
+            var dense = {};
+            var trimSlashRe = /(^\/|\/+$)/;
+            sparse.forEach(function(path) {
+                dense[path] = {};
+                var curParts = path.replace(trimSlashRe, "").split("/");
+                var gapParts = [];
+                curParts.forEach(function(part) {
+                    var parent = "/" + gapParts.join("/");
+                    gapParts.push(part);
+                    var intermediate = "/" + gapParts.join("/");
+                    if (!dense[intermediate]) {
+                        dense[intermediate] = {};
+                    }
+                    if (!dense[parent]) {
+                        dense[parent] = {};
+                    }
+                    if ("/" === parent) {
+                        dense[parent][intermediate.slice(1)] = 1;
+                    } else {
+                        dense[parent][intermediate.replace(parent + "/", "")] = 1;
+                    }
+                });
+            });
+            each(dense, function(path, children) {
+                dense[path] = Object.keys(children);
+            });
+            return dense;
+        }
+        function addInternalProp(obj, name, val) {
+            Object.defineProperty(obj, "__sinonDoublistFs__" + name, {
+                value: val,
+                enumerable: false,
+                configurable: false,
+                writable: true
+            });
+        }
+        function getInternalProp(obj, name) {
+            return obj["__sinonDoublistFs__" + name];
         }
     });
     require.alias("codeactual-is/index.js", "sinon-doublist-fs/deps/is/index.js");
@@ -701,6 +779,8 @@
     require.alias("visionmedia-configurable.js/index.js", "sinon-doublist-fs/deps/configurable.js/index.js");
     require.alias("component-clone/index.js", "sinon-doublist-fs/deps/clone/index.js");
     require.alias("component-type/index.js", "component-clone/deps/type/index.js");
+    require.alias("component-each/index.js", "sinon-doublist-fs/deps/each/index.js");
+    require.alias("component-type/index.js", "component-each/deps/type/index.js");
     require.alias("sinon-doublist-fs/lib/sinon-doublist-fs/index.js", "sinon-doublist-fs/index.js");
     if (typeof exports == "object") {
         module.exports = require("sinon-doublist-fs");

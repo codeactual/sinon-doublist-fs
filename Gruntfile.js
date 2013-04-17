@@ -5,6 +5,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-shell');
 
+  var mochaShelljsOpt = {stdout: true, stderr: true};
+
   grunt.initConfig({
     jshint: {
       src: {
@@ -45,9 +47,7 @@ module.exports = function(grunt) {
     },
     shell: {
       options: {
-        failOnError: true,
-        stdout: true,
-        stderr: true
+        failOnError: true
       },
       build: {
         command: 'component install --dev && component build --standalone sinonDoublistFs --name sinon-doublist-fs --out dist --dev'
@@ -56,9 +56,11 @@ module.exports = function(grunt) {
         command: 'component build --standalone sinonDoublistFs --name sinon-doublist-fs --out dist'
       },
       test_lib: {
+        options: mochaShelljsOpt,
         command: 'mocha --colors --async-only --recursive --reporter spec test/lib'
       },
       test_mocha: {
+        options: mochaShelljsOpt,
         command: 'mocha --colors --async-only --reporter spec test/mocha.js'
       }
     }
@@ -67,5 +69,5 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['jshint']);
   grunt.registerTask('build', ['default', 'shell:build']);
   grunt.registerTask('dist', ['default', 'shell:dist', 'uglify:dist']);
-  grunt.registerTask('test', ['default', 'shell:test_lib', 'shell:test_mocha']);
+  grunt.registerTask('test', ['build', 'shell:test_lib', 'shell:test_mocha']);
 };
