@@ -37,6 +37,22 @@ describe('FileStub', function() {
       fs.statSync('/root/d1/d2/d3/d4/f2.js').isDirectory().should.deep.equal(false);
       testDone();
     });
+
+    it('should accept a string', function(testDone) {
+      var incomplete = '/root/d1/f1.js';
+      var complete = ['/root', '/root/d1', '/root/d1/f1.js'];
+      this.stubTree(incomplete);
+      complete.forEach(function(path) {
+        fs.existsSync(path).should.equal(true);
+      });
+      fs.readdirSync('/').should.deep.equal(['root']);
+      fs.readdirSync('/root').should.deep.equal(['d1']);
+      fs.statSync('/root').isDirectory().should.deep.equal(true);
+      fs.statSync('/root/d1').isDirectory().should.deep.equal(true);
+      fs.readdirSync('/root/d1').should.deep.equal(['f1.js']);
+      fs.statSync('/root/d1/f1.js').isFile().should.deep.equal(true);
+      testDone();
+    });
   });
 
   describe('#make', function() {
