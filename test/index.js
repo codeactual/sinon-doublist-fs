@@ -6,12 +6,12 @@ var chai = require('chai');
 T.should = chai.should();
 chai.Assertion.includeStack = true;
 
-var sdfs = require('..');
-
-T.sinonDoublistFs = sdfs.sinonDoublistFs;
-T.sinonDoublist = require('sinon-doublist').sinonDoublist;
+T.sinonDoublistFs = require('..');
+T.sinonDoublist = require('sinon-doublist');
 T.fs = require('fs');
-T.Batch = sdfs.requireComponent('batch');
+
+T.requireComponent = require('../lib/component/require');
+T.Batch = T.requireComponent('batch');
 
 beforeEach(function(hookDone) {
   T.sinonDoublist(this);
