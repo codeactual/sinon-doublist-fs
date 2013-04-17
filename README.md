@@ -9,7 +9,7 @@ node.js `fs` stubbing mixin for [sinon-doublist](https://github.com/codeactual/s
 ### Single file
 
 ```js
-sinonDoublist('mocha');
+sinonDoublist(sinon, 'mocha');
 sinonDoublistFs('mocha');
 
 describe('MyLib', function() {

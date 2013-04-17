@@ -14,7 +14,7 @@ T.requireComponent = require('../lib/component/require');
 T.Batch = T.requireComponent('batch');
 
 beforeEach(function(hookDone) {
-  T.sinonDoublist(this);
+  T.sinonDoublist(T.sinon, this);
   T.sinonDoublistFs(this);
   this.paths = ['/foo', '/bar'];
   this.strings = ['walking', 'dead'];
