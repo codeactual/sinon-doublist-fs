@@ -9,8 +9,8 @@ node.js `fs` stubbing mixin for [sinon-doublist](https://github.com/codeactual/s
 ### Single file
 
 ```js
-sinonDoublist(sinon, 'mocha');
-sinonDoublistFs(fs, 'mocha');
+sinonDoublist('mocha');
+sinonDoublistFs('mocha');
 
 describe('MyLib', function() {
   describe('#validate()', function() {
@@ -76,19 +76,15 @@ Writes can also be made via `.buffer()` described in the API section.
 
     npm install sinon-doublist-fs
 
-### API only w/ [Component](https://github.com/component/component)
-
-    $ component install codeactual/sinon-doublist-fs
-
 ## API
 
-### #sinonDoublistFs(fs, test)
+### #sinonDoublistFs(test)
 
 > Mix the function set into the given `test` context object, and immediately stub all `fs` functions. Ex. use in a BDD-style `beforeEach`.
 
 Call after `sinonDoublist()`.
 
-### #sinonDoublistFs(fs, 'mocha')
+### #sinonDoublistFs('mocha')
 
 > Same mixin operation as above but with automatic `beforeEach/afterEach` boilerplating in mocha.
 
@@ -137,24 +133,3 @@ Omit trailing slashes from path strings.
 ## Tests
 
     npm test
-
-## Change Log
-
-### 0.2.0
-
-* Add `fs.renameSync` stub.
-* Add `FileStub#unlink`.
-* Fix NPM compatibility.
-
-### 0.1.2
-
-* Support file tree building by passing an array of `stubFile()` chains to `.readdir()`.
-* Upgrade `codeactual/sinon-doublist` to 0.2.3.
-
-### 0.1.1
-
-* Upgrade `codeactual/sinon-doublist` to 0.2.2.
-
-### 0.1.0
-
-* Add `stubFile` mixin.
