@@ -24,7 +24,7 @@ describe('MyLib', function() {
 });
 ```
 
-### File tree
+### File tree with attributes
 
 ```js
 /**
@@ -50,13 +50,25 @@ this.stubFile('/root').readdir([
 ]).make();
 ```
 
+### File tree from sparse path list
+
+```js
+// Creates the same hierarchy as the `stubTree()` example above.
+// Ancestor directories will be stubbed automatically.
+this.stubTree([
+  '/root/a/b2',
+  '/root/a2',
+  '/root/a3/b4/c'
+]);
+```
+
 ## Stub Behavior
 
 ### fs.writeFile* / fs.readFile*
 
 > Writes will be captured and made available to later reads.
 
-Writes can also be made via `.buffer()` described in the API section.
+Writes can also be made via `.buffer()` described in the [API documentation](docs/sinon-doublist-fs.md).
 
 ### fs.exists*
 
@@ -78,53 +90,7 @@ Writes can also be made via `.buffer()` described in the API section.
 
 ## API
 
-### #sinonDoublistFs(test)
-
-> Mix the function set into the given `test` context object, and immediately stub all `fs` functions. Ex. use in a BDD-style `beforeEach`.
-
-Call after `sinonDoublist()`.
-
-### #sinonDoublistFs('mocha')
-
-> Same mixin operation as above but with automatic `beforeEach/afterEach` boilerplating in mocha.
-
-### {object} fsStub
-
-> The above mixin operations will add `this.fsStub` to the test context. It is the product of `this.stub(fs)` and can be used for custom doubling not yet supported here.
-
-### #restoreFs()
-
-> Clean up resources not covered by `sinon.sandbox#restore`. Ex. use in a BDD-style `afterEach`.
-
-### #stubFile(name)
-
-> Begin configuring a file stub. Returns a fluent interface for further configuration.
-
-### .buffer(data) [#stubFile chain]
-
-> Set the buffer to be returned by `fs.readFile*`.
-
-### .stat(key, val) [#stubFile chain]
-
-> Set an `fs.Stats` property to be returned by `fs.stat*`.
-
-### .readdir(paths) [#stubFile chain]
-
-> Set `fs.readdir*` results.
-
-* To fake a directory, pass an array of path strings.
-* To fake a tree, pass an array of `stubFile()` chains without final `make()` calls.
-* To fake a file again, pass `false`. (Only necessary to overwrite a past array value.)
-
-Omit trailing slashes from path strings.
-
-### .make() [#stubFile chain]
-
-> Finalize the `fs.{exists,stat,etc.}` stubs based on collected settings.
-
-### .unlink() [#stubFile chain]
-
-> Undo make().
+[Documentation](docs/sinon-doublist-fs.md)
 
 ## License
 
