@@ -71,12 +71,10 @@ describe('FileStub', function() {
       });
     });
 
-    it('should init parent name', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
+    it.skip('should init parent name', function(testDone) {
     });
 
-    it('should init readdir', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
+    it.skip('should init readdir', function(testDone) {
     });
   });
 
@@ -142,20 +140,16 @@ describe('FileStub', function() {
       testDone();
     });
 
-    it('should update readdir from path string array', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
+    it.skip('should update readdir from path string array', function(testDone) {
     });
 
-    it('should init parent names from path string array', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
+    it.skip('should init parent names from path string array', function(testDone) {
     });
 
-    it('should update readdir from FileStub array', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
+    it.skip('should update readdir from FileStub array', function(testDone) {
     });
 
-    it('should init parent names from FileStub array', function(testDone) {
-      console.log('\x1B[33m<---------- INCOMPLETE\x1B[0m'); testDone(); // TODO
+    it.skip('should init parent names from FileStub array', function(testDone) {
     });
 
     it('should update stub map from FileStub array', function(testDone) {
