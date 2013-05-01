@@ -30,6 +30,7 @@
     "sinon-doublist": "~0.3.0"
   },
   "dependencies": {
+    "gitemplate-dox": "~0.1.0",
     "long-con": "~0.1.0"
   },
   "devDependencies": {
