@@ -138,8 +138,8 @@ the new root directory.
 
 **See:**
 
-- FileStub.map
-- FileStub.renameSync
+- [FileStub](#filestub).map
+- [FileStub](#filestub).renameSync
 
 # FileStub.prototype.readdir(paths)
 
