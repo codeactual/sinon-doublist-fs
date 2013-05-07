@@ -1,7 +1,7 @@
 {
   "name": "sinon-doublist-fs",
   "description": "node.js `fs` stubbing mixin for sinon-doublist",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "index.js",
   "keywords": [
     "sinon",
@@ -29,7 +29,7 @@
   },
   "peerDependencies": {
     "sinon": "~1.6.0",
-    "sinon-doublist": "~0.3.0"
+    "sinon-doublist": "~0.3.1"
   },
   "dependencies": {
     "long-con": "~0.1.0"

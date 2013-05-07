@@ -1,3 +1,7 @@
+# 0.2.1
+
+* Remove NPM shrinkwrapping.
+
 # 0.2.0
 
 * Add `stubTree` mixin.

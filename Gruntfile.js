@@ -55,9 +55,6 @@ module.exports = function(grunt) {
       dist: {
         command: 'component build --standalone sinonDoublistFs --name sinon-doublist-fs --out dist'
       },
-      shrinkwrap: {
-        command: 'npm shrinkwrap'
-      },
       test_lib: {
         options: mochaShelljsOpt,
         command: 'mocha --colors --async-only --recursive --reporter spec test/lib'
@@ -75,6 +72,6 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['jshint']);
   grunt.registerTask('dox', ['shell:dox_lib']);
   grunt.registerTask('build', ['default', 'shell:build']);
-  grunt.registerTask('dist', ['default', 'shell:dist', 'uglify:dist', 'shell:shrinkwrap', 'dox']);
+  grunt.registerTask('dist', ['default', 'shell:dist', 'uglify:dist', 'dox']);
   grunt.registerTask('test', ['build', 'shell:test_lib', 'shell:test_mocha']);
 };
