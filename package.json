@@ -9,7 +9,9 @@
     "mixin",
     "unit",
     "spy",
-    "stub"
+    "stub",
+    "fs",
+    "filesystem"
   ],
   "contributors": [
     {
