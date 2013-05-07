@@ -1,5 +1,6 @@
 # 0.2.0
 
+* Add `stubTree` mixin.
 * Remove requirement that `fs` must be passed to `sinonDoublistFs()`.
 * Add `fs.renameSync` stub.
 * Add `FileStub#unlink`.
