@@ -56,15 +56,30 @@ describe('FileStub', function() {
   });
 
   describe('#make', function() {
-    it('should pass defaults to fs.statsSync', function(testDone) {
+    it('should stub fs.statSync', function(testDone) {
       this.stubFile(this.paths[0]).make();
       assertDefaultsMatch(fs.statSync(this.paths[0]));
       testDone();
     });
 
-    it('should pass defaults to fs.stats', function(testDone) {
+    it('should stub fs.stat', function(testDone) {
       this.stubFile(this.paths[0]).make();
       fs.stat(this.paths[0], function(err, stats) {
+        T.should.equal(err, null);
+        assertDefaultsMatch(stats);
+        testDone();
+      });
+    });
+
+    it('should stub fs.lstatSync', function(testDone) {
+      this.stubFile(this.paths[0]).make();
+      assertDefaultsMatch(fs.lstatSync(this.paths[0]));
+      testDone();
+    });
+
+    it('should stub fs.lstat', function(testDone) {
+      this.stubFile(this.paths[0]).make();
+      fs.lstat(this.paths[0], function(err, stats) {
         T.should.equal(err, null);
         assertDefaultsMatch(stats);
         testDone();
