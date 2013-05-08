@@ -1,3 +1,7 @@
+# 0.2.3
+
+* Upgrade `sinon-doublist`, `long-con`, `apidox`.
+
 # 0.2.2
 
 * Add missing `fs.lstat*` responses for each `FileStub`. Fix incompatibility with `shelljs-0.1.3`.
