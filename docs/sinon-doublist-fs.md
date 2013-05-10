@@ -30,7 +30,6 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 **Parameters:**
 
 - `{object | string} test` Test context *OR* name of supported test runner
-
   - `{object}` Context object including `sandbox` from prior `sinonDoublist()` call
   - `{string}` Named runner will be configured to automatically set-up/tear-down.
   - Supported runners: 'mocha'
@@ -148,7 +147,6 @@ the new root directory.
 **Parameters:**
 
 - `{boolean | array} paths`
-
   - false: revert to default `isFile()=true`
   - array: `FileStub` objects whose `make()` has not yet been called
 
