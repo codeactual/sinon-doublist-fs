@@ -91,7 +91,9 @@ this.stubTree([
 ]);
 ```
 
-## Stub Behavior
+## `fs.*` Stub Behaviors
+
+_`stubFile()` and `stubTree()` internally prepare the responses of these `fs` methods._
 
 ### `fs.writeFile*`, `fs.readFile*`
 
@@ -103,13 +105,13 @@ Writes can also be made via [FileStub#buffer()](docs/sinon-doublist-fs.md).
 
 > Responds with `false` for a given path until an associated stub is finalized by [FileStub#make()](docs/sinon-doublist-fs.md).
 
-### `fs.readdir*`
+### `fs.readdir*`. `isFile()`, `isDirectory()`
 
-> Responds with paths passed to [FileStub#readdir()](docs/sinon-doublist-fs.md).
+> Based on paths (if any) passed to [FileStub#readdir()](docs/sinon-doublist-fs.md).
 
 ### `fs.stat*` and `fs.lstat*`
 
-> Responds with `fs.Stats` properties configured via [FileStub#stat()](docs/sinon-doublist-fs.md). `isFile()/isDirectory()` methods respond based use of `.readdir()`.
+> Responds with `fs.Stats` properties configured via [FileStub#stat()](docs/sinon-doublist-fs.md).
 
 ## Installation
 
