@@ -79,7 +79,7 @@ Any missing ancestor directories will be created automatically.
 **Parameters:**
 
 - `{string} filename`
-- `{string | object} data` String or Buffer instance
+- `{string | object} data` `String` or `Buffer` instance
 - `{function} cb`
 
 # customFsStub.writeFileSync(filename, data)
@@ -89,7 +89,7 @@ Any missing ancestor directories will be created automatically.
 **Parameters:**
 
 - `{string} filename`
-- `{string | object} data` String or Buffer instance
+- `{string | object} data` `String` or `Buffer` instance
 
 # FileStub()
 
@@ -97,13 +97,23 @@ Any missing ancestor directories will be created automatically.
 
 An entry in the map of stubbed files/directories.
 
+**Usage:**
+
+```js
+var stub = this.stubFile('/path/to/file');
+stub
+  .stat('size', 50)
+  .stat('gid', 2000)
+  .make();
+```
+
 **Configuration:**
 
 - `{string} name` Absolute path w/out trailing slash
 - `{boolean|array} readdir` Names of direct descendant files/directories
   - `false` will lead to `isFile()` returning `true`
 - `{string} parentName` Absolute path w/out trailing slash
-- `{object} stats` Attributes to be returned by `stat*()
+- `{object} stats` Attributes to be returned by `stat*()` and `lstat*()`
   - Initial values are from the `fs.Stats` manual entry.
 
 # FileStub.prototype.buffer(buffer)
@@ -112,7 +122,7 @@ An entry in the map of stubbed files/directories.
 
 **Parameters:**
 
-- `{string | object} buffer` String or Buffer instance
+- `{string | object} buffer` `String` or `Buffer` instance
 
 **Return:**
 
@@ -137,8 +147,8 @@ the new root directory.
 
 **See:**
 
-- [FileStub](#filestub).map
-- [FileStub](#filestub).renameSync
+- [FileStub.prototype.map](#filestubprototypemapcb)
+- [FileStub](#filestub).prototype.renameSync
 
 # FileStub.prototype.readdir(paths)
 
@@ -147,8 +157,8 @@ the new root directory.
 **Parameters:**
 
 - `{boolean | array} paths`
-  - false: revert to default `isFile()=true`
-  - array: `FileStub` objects whose `make()` has not yet been called
+  - `false`: revert to default `isFile()=true`
+  - `array`: [FileStub](#filestub) objects whose `make()` has not yet been called
 
 **Return:**
 
@@ -169,7 +179,7 @@ the new root directory.
 
 # FileStub.prototype.make()
 
-> Finalize the `fs.{exists,stat,etc.}` stubs based on collected settings.
+> Finalize the `fs.{exists,lstat,stat,etc.}` stubs based on collected settings.
 
 # FileStub.prototype.unlink()
 
