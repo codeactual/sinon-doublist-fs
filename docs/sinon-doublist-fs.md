@@ -148,7 +148,7 @@ the new root directory.
 **See:**
 
 - [FileStub.prototype.map](#filestubprototypemapcb)
-- [FileStub](#filestub).prototype.renameSync
+- [customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
 
 # FileStub.prototype.readdir(paths)
 
