@@ -38,6 +38,16 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 
 > Begin configuring a file stub.
 
+**Usage:**
+
+```js
+var stub = this.stubFile('/path/to/file');
+stub
+  .stat('size', 50)
+  .stat('gid', 2000)
+  .make();
+```
+
 If the test needs ancestor directories to be automatically created/stubbed,
 use [mixin.stubTree](#mixinstubtreepaths) instead.
 
@@ -54,6 +64,16 @@ use [mixin.stubTree](#mixinstubtreepaths) instead.
 > Stub a file tree based on a sparse list of absolute paths.
 
 Any missing ancestor directories will be created automatically.
+
+**Usage:**
+
+```js
+this.stubTree([
+  '/root/a/b2',
+  '/root/a2',
+  '/root/a3/b4/c'
+]);
+```
 
 **Parameters:**
 
@@ -100,8 +120,9 @@ An entry in the map of stubbed files/directories.
 **Usage:**
 
 ```js
-var stub = this.stubFile('/path/to/file');
+var stub = new FileStub();
 stub
+  .set('name', '/path/to/file')
   .stat('size', 50)
   .stat('gid', 2000)
   .make();
