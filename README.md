@@ -6,25 +6,54 @@ node.js `fs` stubbing mixin for [sinon-doublist](https://github.com/codeactual/s
 
 ## Examples
 
-### Single file
+### Mixin (recommended)
 
 ```js
 sinonDoublist(sinon, 'mocha');
 sinonDoublistFs('mocha');
 
-describe('MyLib', function() {
-  describe('#validate()', function() {
-    it('should detect file that is too large', function() {
-      var filename = '/path/to/file';
-      this.stubFile(filename).stat('size', 1024 * 1024 * 1024).make();
-      var myLib = new MyLib(filename);
-      myLib.validate().should.equal(false);
-    });
+describe('myFunction', function() {
+  it('should do something', function() {
+    // this.stubFile()
+    // this.stubTree()
   });
 });
 ```
 
-### File tree with attributes
+### Mixin (manual)
+
+```js
+describe('myFunction', function() {
+  beforeEach(function() {
+    sinonDoublist(sinon, this);
+    sinonDoublistFs(this);
+  });
+  
+  afterEach(function() {
+    this.sandbox.restore();
+  });
+  
+  it('should do something', function() {
+    // this.spyFile()
+    // this.stubTree()
+  });
+});
+```
+
+### Fake a large file
+
+```js
+describe('#validate()', function() {
+ it('should detect file that is too large', function() {
+    var filename = '/path/to/file';
+    this.stubFile(filename).stat('size', 1024 * 1024 * 1024).make();
+    var myLib = new MyLib(filename);
+    myLib.validate().should.equal(false);
+  });
+});
+```
+
+### Fake a file tree with leaf attributes
 
 ```js
 /**
@@ -50,11 +79,11 @@ this.stubFile('/root').readdir([
 ]).make();
 ```
 
-### File tree from sparse path list
+### Fake a file tree from a sparse path list
+
+> Creates the same hierarchy as the `stubFile()` example above. However, ancestor directories are stubbed automatically.
 
 ```js
-// Creates the same hierarchy as the `stubTree()` example above.
-// Ancestor directories will be stubbed automatically.
 this.stubTree([
   '/root/a/b2',
   '/root/a2',
@@ -64,23 +93,23 @@ this.stubTree([
 
 ## Stub Behavior
 
-### fs.writeFile* / fs.readFile*
+### `fs.writeFile*`, `fs.readFile*`
 
 > Writes will be captured and made available to later reads.
 
-Writes can also be made via `.buffer()` described in the [API documentation](docs/sinon-doublist-fs.md).
+Writes can also be made via [FileStub#buffer()](docs/sinon-doublist-fs.md).
 
-### fs.exists*
+### `fs.exists*`
 
-> Responds with `false` for a given path until an associated stub is finalized by `.make()`.
+> Responds with `false` for a given path until an associated stub is finalized by [FileStub#make()](docs/sinon-doublist-fs.md).
 
-### fs.readdir*
+### `fs.readdir*`
 
-> Responds with paths passes to the `.readdir()` described in the API section.
+> Responds with paths passed to [FileStub#readdir()](docs/sinon-doublist-fs.md).
 
-### fs.stat*
+### `fs.stat*` and `fs.lstat*`
 
-> Responds with `fs.Stats` properties configured via `.stat()` described in the API section. `isFile()/isDirectory()` methods respond based use of `.readdir()`.
+> Responds with `fs.Stats` properties configured via [FileStub#stat()](docs/sinon-doublist-fs.md). `isFile()/isDirectory()` methods respond based use of `.readdir()`.
 
 ## Installation
 
