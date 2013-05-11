@@ -1,4 +1,4 @@
-node.js `fs` stubbing mixin for sinon-doublist.
+node.js `fs` mixins for sinon-doublist
 
 _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 

@@ -1,7 +1,7 @@
 {
   "name": "sinon-doublist-fs",
   "repo": "codeactual/sinon-doublist",
-  "description": "node.js `fs` stubbing mixin for sinon-doublist",
+  "description": "node.js fs mixins for sinon-doublist",
   "version": "0.2.3",
   "keywords": [
     "sinon",
