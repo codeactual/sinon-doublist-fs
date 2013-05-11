@@ -1,6 +1,6 @@
 # sinon-doublist-fs
 
-node.js `fs` stubbing mixin for [sinon-doublist](https://github.com/codeactual/sinon-doublist).
+node.js `fs` mixins for [sinon-doublist](https://github.com/codeactual/sinon-doublist): `stubFile()`, `stubTree()`
 
 [![Build Status](https://travis-ci.org/codeactual/sinon-doublist-fs.png)](https://travis-ci.org/codeactual/sinon-doublist-fs)
 
