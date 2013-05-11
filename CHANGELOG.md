@@ -1,3 +1,8 @@
+# 0.3.0
+
+* Upgrade `sinon-doublist` peer dependency to `~0.4.0` (`sinon ~1.7.2`).
+* Rely on `sinon-doublist` to enforce `sinon` peer dependency.
+
 # 0.2.3
 
 * Upgrade `sinon-doublist`, `long-con`, `apidox`.
