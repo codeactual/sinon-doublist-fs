@@ -2,16 +2,18 @@ node.js `fs` mixins for sinon-doublist
 
 _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 
-- [module.exports](#moduleexports)
-- [sinonDoublistFs](#sinondoublistfstest)
-- [mixin.stubFile](#mixinstubfilename)
+<a name="tableofcontents"></a>
+
+- <a name="toc_module"></a>[module.exports](#moduleexports)
+- <a name="toc_sinondoublistfs"></a>[sinonDoublistFs](#sinondoublistfstest)
+- <a name="toc_mixin"></a>[mixin.stubFile](#mixinstubfilename)
 - [mixin.stubTree](#mixinstubtreepaths)
 - [mixin.restoreFs](#mixinrestorefs)
-- [customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
+- <a name="toc_customfsstub"></a>[customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
 - [customFsStub.writeFile](#customfsstubwritefilefilename-data-cb)
 - [customFsStub.writeFileSync](#customfsstubwritefilesyncfilename-data)
-- [FileStub](#filestub)
-- [FileStub.prototype.buffer](#filestubprototypebufferbuffer)
+- <a name="toc_filestub"></a>[FileStub](#filestub)
+- <a name="toc_filestubprototype"></a>[FileStub.prototype.buffer](#filestubprototypebufferbuffer)
 - [FileStub.prototype.map](#filestubprototypemapcb)
 - [FileStub.prototype.copyTree](#filestubprototypecopytreename)
 - [FileStub.prototype.readdir](#filestubprototypereaddirpaths)
@@ -19,9 +21,13 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 - [FileStub.prototype.make](#filestubprototypemake)
 - [FileStub.prototype.unlink](#filestubprototypeunlink)
 
+<a name="module"></a>
+
 # module.exports()
 
 > Reference to `sinonDoublistfs()`.
+
+<sub>Go: [TOC](#tableofcontents) | [module](#toc_module)</sub>
 
 # sinonDoublistFs(test)
 
@@ -33,6 +39,10 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
   - `{object}` Context object including `sandbox` from prior `sinonDoublist()` call
   - `{string}` Named runner will be configured to automatically set-up/tear-down.
   - Supported runners: 'mocha'
+
+<sub>Go: [TOC](#tableofcontents)</sub>
+
+<a name="mixin"></a>
 
 # mixin.stubFile(name)
 
@@ -59,6 +69,8 @@ use [mixin.stubTree](#mixinstubtreepaths) instead.
 
 `{object}` this
 
+<sub>Go: [TOC](#tableofcontents) | [mixin](#toc_mixin)</sub>
+
 # mixin.stubTree(paths)
 
 > Stub a file tree based on a sparse list of absolute paths.
@@ -79,9 +91,15 @@ this.stubTree([
 
 - `{array} paths` File/directory absolute paths w/out trailing slashes
 
+<sub>Go: [TOC](#tableofcontents) | [mixin](#toc_mixin)</sub>
+
 # mixin.restoreFs()
 
 > Clean up resources not covered by `sinonDoublist` sandbox restoration.
+
+<sub>Go: [TOC](#tableofcontents) | [mixin](#toc_mixin)</sub>
+
+<a name="customfsstub"></a>
 
 # customFsStub.renameSync(oldPath, newPath)
 
@@ -91,6 +109,8 @@ this.stubTree([
 
 - `{string} oldPath`
 - `{string} newPath`
+
+<sub>Go: [TOC](#tableofcontents) | [customFsStub](#toc_customfsstub)</sub>
 
 # customFsStub.writeFile(filename, data, cb)
 
@@ -102,6 +122,8 @@ this.stubTree([
 - `{string | object} data` `String` or `Buffer` instance
 - `{function} cb`
 
+<sub>Go: [TOC](#tableofcontents) | [customFsStub](#toc_customfsstub)</sub>
+
 # customFsStub.writeFileSync(filename, data)
 
 > Save a buffer for later retrieval by `fs.readFile*`.
@@ -110,6 +132,8 @@ this.stubTree([
 
 - `{string} filename`
 - `{string | object} data` `String` or `Buffer` instance
+
+<sub>Go: [TOC](#tableofcontents) | [customFsStub](#toc_customfsstub)</sub>
 
 # FileStub()
 
@@ -137,6 +161,10 @@ stub
 - `{object} stats` Attributes to be returned by `stat*()` and `lstat*()`
   - Initial values are from the `fs.Stats` manual entry.
 
+<sub>Go: [TOC](#tableofcontents)</sub>
+
+<a name="filestubprototype"></a>
+
 # FileStub.prototype.buffer(buffer)
 
 > Set the buffer to be returned by `fs.readFile*`.
@@ -149,6 +177,8 @@ stub
 
 `{this}`
 
+<sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
+
 # FileStub.prototype.map(cb)
 
 > Supply all sub-dir file stubs, recursively, to the iterator.
@@ -156,6 +186,8 @@ stub
 **Parameters:**
 
 - `{function} cb` Iterator that receives the file stub
+
+<sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
 
 # FileStub.prototype.copyTree(name)
 
@@ -171,6 +203,8 @@ the new root directory.
 - [FileStub.prototype.map](#filestubprototypemapcb)
 - [customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
 
+<sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
+
 # FileStub.prototype.readdir(paths)
 
 > Set `fs.readdir*` results.
@@ -185,6 +219,8 @@ the new root directory.
 
 `{this}`
 
+<sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
+
 # FileStub.prototype.stat(key, val)
 
 > Set an `fs.Stats` property.
@@ -198,12 +234,18 @@ the new root directory.
 
 `{this}`
 
+<sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
+
 # FileStub.prototype.make()
 
 > Finalize the `fs.{exists,lstat,stat,etc.}` stubs based on collected settings.
 
+<sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
+
 # FileStub.prototype.unlink()
 
 > Undo a prior `make()`.
+
+<sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
 
 _&mdash;generated by [apidox](https://github.com/codeactual/apidox)&mdash;_
