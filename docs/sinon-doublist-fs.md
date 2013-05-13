@@ -4,22 +4,22 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 
 <a name="tableofcontents"></a>
 
-- <a name="toc_module"></a>[module.exports](#moduleexports)
-- <a name="toc_sinondoublistfs"></a>[sinonDoublistFs](#sinondoublistfstest)
-- <a name="toc_mixin"></a>[mixin.stubFile](#mixinstubfilename)
-- [mixin.stubTree](#mixinstubtreepaths)
-- [mixin.restoreFs](#mixinrestorefs)
-- <a name="toc_customfsstub"></a>[customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
-- [customFsStub.writeFile](#customfsstubwritefilefilename-data-cb)
-- [customFsStub.writeFileSync](#customfsstubwritefilesyncfilename-data)
+- <a name="toc_moduleexports"></a><a name="toc_module"></a>[module.exports](#moduleexports)
+- <a name="toc_sinondoublistfstest"></a>[sinonDoublistFs](#sinondoublistfstest)
+- <a name="toc_mixinstubfilename"></a><a name="toc_mixin"></a>[mixin.stubFile](#mixinstubfilename)
+- <a name="toc_mixinstubtreepaths"></a>[mixin.stubTree](#mixinstubtreepaths)
+- <a name="toc_mixinrestorefs"></a>[mixin.restoreFs](#mixinrestorefs)
+- <a name="toc_customfsstubrenamesyncoldpath-newpath"></a><a name="toc_customfsstub"></a>[customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
+- <a name="toc_customfsstubwritefilefilename-data-cb"></a>[customFsStub.writeFile](#customfsstubwritefilefilename-data-cb)
+- <a name="toc_customfsstubwritefilesyncfilename-data"></a>[customFsStub.writeFileSync](#customfsstubwritefilesyncfilename-data)
 - <a name="toc_filestub"></a>[FileStub](#filestub)
-- <a name="toc_filestubprototype"></a>[FileStub.prototype.buffer](#filestubprototypebufferbuffer)
-- [FileStub.prototype.map](#filestubprototypemapcb)
-- [FileStub.prototype.copyTree](#filestubprototypecopytreename)
-- [FileStub.prototype.readdir](#filestubprototypereaddirpaths)
-- [FileStub.prototype.stat](#filestubprototypestatkey-val)
-- [FileStub.prototype.make](#filestubprototypemake)
-- [FileStub.prototype.unlink](#filestubprototypeunlink)
+- <a name="toc_filestubprototypebufferbuffer"></a><a name="toc_filestubprototype"></a>[FileStub.prototype.buffer](#filestubprototypebufferbuffer)
+- <a name="toc_filestubprototypemapcb"></a>[FileStub.prototype.map](#filestubprototypemapcb)
+- <a name="toc_filestubprototypecopytreename"></a>[FileStub.prototype.copyTree](#filestubprototypecopytreename)
+- <a name="toc_filestubprototypereaddirpaths"></a>[FileStub.prototype.readdir](#filestubprototypereaddirpaths)
+- <a name="toc_filestubprototypestatkey-val"></a>[FileStub.prototype.stat](#filestubprototypestatkey-val)
+- <a name="toc_filestubprototypemake"></a>[FileStub.prototype.make](#filestubprototypemake)
+- <a name="toc_filestubprototypeunlink"></a>[FileStub.prototype.unlink](#filestubprototypeunlink)
 
 <a name="module"></a>
 
