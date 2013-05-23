@@ -272,12 +272,17 @@
         };
     });
     require.alias("codeactual-is/index.js", "sinon-doublist-fs/deps/is/index.js");
+    require.alias("codeactual-is/index.js", "is/index.js");
     require.alias("manuelstofer-each/index.js", "codeactual-is/deps/each/index.js");
     require.alias("component-bind/index.js", "sinon-doublist-fs/deps/bind/index.js");
+    require.alias("component-bind/index.js", "bind/index.js");
     require.alias("visionmedia-configurable.js/index.js", "sinon-doublist-fs/deps/configurable.js/index.js");
+    require.alias("visionmedia-configurable.js/index.js", "configurable.js/index.js");
     require.alias("component-clone/index.js", "sinon-doublist-fs/deps/clone/index.js");
+    require.alias("component-clone/index.js", "clone/index.js");
     require.alias("component-type/index.js", "component-clone/deps/type/index.js");
     require.alias("component-each/index.js", "sinon-doublist-fs/deps/each/index.js");
+    require.alias("component-each/index.js", "each/index.js");
     require.alias("component-type/index.js", "component-each/deps/type/index.js");
     require.alias("sinon-doublist-fs/lib/component/main.js", "sinon-doublist-fs/index.js");
     if (typeof exports == "object") {
@@ -287,6 +292,6 @@
             return require("sinon-doublist-fs");
         });
     } else {
-        window["sinonDoublistFs"] = require("sinon-doublist-fs");
+        this["sinonDoublistFs"] = require("sinon-doublist-fs");
     }
 })();

@@ -1,3 +1,7 @@
+# 0.3.1
+
+* chore(npm): Upgrade outdated dependencies
+
 # 0.3.0
 
 * Upgrade `sinon-doublist` peer dependency to `~0.4.0` (`sinon ~1.7.2`).
