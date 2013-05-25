@@ -57,11 +57,11 @@ module.exports = function(grunt) {
       },
       test_lib: {
         options: mochaShelljsOpt,
-        command: 'mocha --colors --async-only --recursive --reporter spec test/lib'
+        command: 'mocha --colors --recursive --reporter spec test/lib'
       },
       test_mocha: {
         options: mochaShelljsOpt,
-        command: 'mocha --colors --async-only --reporter spec test/mocha.js'
+        command: 'mocha --colors --reporter spec test/mocha.js'
       },
       dox_lib: {
         command: 'apidox --input lib/sinon-doublist-fs/index.js --output docs/sinon-doublist-fs.md'

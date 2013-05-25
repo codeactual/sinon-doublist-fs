@@ -28,14 +28,13 @@ describe('fs stub', function() {
   });
 
   describe('#existsSync', function() {
-    it('should detect stub', function(testDone) {
+    it('should detect stub', function() {
       should.equal(fs.existsSync(this.paths[0]), false);
       should.equal(fs.existsSync(this.paths[1]), false);
       this.stubFile(this.paths[0]).make();
       this.stubFile(this.paths[1]).make();
       should.equal(fs.existsSync(this.paths[0]), true);
       should.equal(fs.existsSync(this.paths[1]), true);
-      testDone();
     });
   });
 
@@ -52,11 +51,10 @@ describe('fs stub', function() {
   });
 
   describe('#writeFileSync', function() {
-    it('should update fake file map', function(testDone) {
+    it('should update fake file map', function() {
       this.stubFile(this.paths[0]).make();
       fs.writeFileSync(this.paths[0], this.strings[0]);
       fs.readFileSync(this.paths[0]).toString().should.equal(this.strings[0]);
-      testDone();
     });
   });
 
@@ -78,7 +76,7 @@ describe('fs stub', function() {
     it.skip('should copy readFile buffers', function(testDone) {
     });
 
-    it('should rename copied dir descendants', function(testDone) {
+    it('should rename copied dir descendants', function() {
       this.stubFile('/root').readdir([
         this.stubFile('/root/a').readdir([
           this.stubFile('/root/a/index.js')
@@ -87,10 +85,9 @@ describe('fs stub', function() {
       fs.renameSync('/root/a', '/root/b');
       fs.existsSync('/root/a/index.js').should.equal(false);
       fs.statSync('/root/b/index.js').isFile().should.equal(true);
-      testDone();
     });
 
-    it('should transpose parent readdir item', function(testDone) {
+    it('should transpose parent readdir item', function() {
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a')
       ]).make();
@@ -104,10 +101,9 @@ describe('fs stub', function() {
       fs.existsSync(this.paths[0] + '/a').should.equal(false);
       fs.existsSync(this.paths[0] + '/b').should.equal(true);
       fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
-      testDone();
     });
 
-    it('should overwrite parent readdir item', function(testDone) {
+    it('should overwrite parent readdir item', function() {
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a'),
         this.stubFile(this.paths[0] + '/b')
@@ -122,10 +118,9 @@ describe('fs stub', function() {
       fs.existsSync(this.paths[0] + '/a').should.equal(false);
       fs.existsSync(this.paths[0] + '/b').should.equal(true);
       fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
-      testDone();
     });
 
-    it('should retain own readdir list', function(testDone) {
+    it('should retain own readdir list', function() {
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a').readdir([
           this.stubFile(this.paths[0] + '/a/c')
@@ -143,10 +138,9 @@ describe('fs stub', function() {
       fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
 
       fs.readdirSync(this.paths[0] + '/b').should.deep.equal(['c']);
-      testDone();
     });
 
-    it('should retain own readdir list after overwrite', function(testDone) {
+    it('should retain own readdir list after overwrite', function() {
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a').readdir([
           this.stubFile(this.paths[0] + '/a/c')
@@ -167,7 +161,6 @@ describe('fs stub', function() {
       fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
 
       fs.readdirSync(this.paths[0] + '/b').should.deep.equal(['d', 'c']);
-      testDone();
     });
 
     it.skip('should update parent name of children', function(testDone) {

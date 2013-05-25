@@ -5,7 +5,7 @@ var should = T.should;
 
 describe('FileStub', function() {
   describe('#stubTree', function() {
-    it('should fill in missing intermediate dirs', function(testDone) {
+    it('should fill in missing intermediate dirs', function() {
       var incomplete = [
         '/root',
         '/root/d1/d2/f1.js',
@@ -35,10 +35,9 @@ describe('FileStub', function() {
       fs.readdirSync('/root/d1/d2/d3/d4').should.deep.equal(['f2.js']);
       fs.statSync('/root/d1/d2/d3/d4').isDirectory().should.deep.equal(true);
       fs.statSync('/root/d1/d2/d3/d4/f2.js').isDirectory().should.deep.equal(false);
-      testDone();
     });
 
-    it('should accept a string', function(testDone) {
+    it('should accept a string', function() {
       var incomplete = '/root/d1/f1.js';
       var complete = ['/root', '/root/d1', '/root/d1/f1.js'];
       this.stubTree(incomplete);
@@ -51,15 +50,13 @@ describe('FileStub', function() {
       fs.statSync('/root/d1').isDirectory().should.deep.equal(true);
       fs.readdirSync('/root/d1').should.deep.equal(['f1.js']);
       fs.statSync('/root/d1/f1.js').isFile().should.deep.equal(true);
-      testDone();
     });
   });
 
   describe('#make', function() {
-    it('should stub fs.statSync', function(testDone) {
+    it('should stub fs.statSync', function() {
       this.stubFile(this.paths[0]).make();
       assertDefaultsMatch(fs.statSync(this.paths[0]));
-      testDone();
     });
 
     it('should stub fs.stat', function(testDone) {
@@ -71,10 +68,9 @@ describe('FileStub', function() {
       });
     });
 
-    it('should stub fs.lstatSync', function(testDone) {
+    it('should stub fs.lstatSync', function() {
       this.stubFile(this.paths[0]).make();
       assertDefaultsMatch(fs.lstatSync(this.paths[0]));
-      testDone();
     });
 
     it('should stub fs.lstat', function(testDone) {
@@ -94,7 +90,7 @@ describe('FileStub', function() {
   });
 
   describe('#stat', function() {
-    it('should set stats property', function(testDone) {
+    it('should set stats property', function() {
       this.stubFile(this.paths[0]).stat('size', 1).stat('gid', 1000).make();
       fs.statSync(this.paths[0]).size.should.equal(1);
       fs.statSync(this.paths[0]).gid.should.equal(1000);
@@ -103,21 +99,18 @@ describe('FileStub', function() {
       this.stubFile(this.paths[0]).stat('size', 2).stat('gid', 2000).make();
       fs.statSync(this.paths[0]).size.should.equal(2);
       fs.statSync(this.paths[0]).gid.should.equal(2000);
-      testDone();
     });
   });
 
   describe('#buffer', function() {
-    it('should set readFileSync output from string', function(testDone) {
+    it('should set readFileSync output from string', function() {
       this.stubFile(this.paths[0]).buffer(this.strings[0]).make();
       fs.readFileSync(this.paths[0]).toString().should.equal(this.strings[0]);
-      testDone();
     });
 
-    it('should set readFileSync output from buffer', function(testDone) {
+    it('should set readFileSync output from buffer', function() {
       this.stubFile(this.paths[0]).buffer(new Buffer(this.strings[0])).make();
       fs.readFileSync(this.paths[0]).toString().should.equal(this.strings[0]);
-      testDone();
     });
 
     it('should set readFile output', function(testDone) {
@@ -130,29 +123,26 @@ describe('FileStub', function() {
       });
     });
 
-    it('should set stat size', function(testDone) {
+    it('should set stat size', function() {
       this.stubFile(this.paths[0]).buffer(this.strings[0]).make();
       fs.statSync(this.paths[0]).size.should.equal(this.strings[0].length + 1);
-      testDone();
     });
   });
 
   describe('#readdir', function() {
-    it('should stub readdirSync when passed false', function(testDone) {
+    it('should stub readdirSync when passed false', function() {
       var self = this;
       this.stubFile(this.paths[0]).readdir(false).make();
       (function() {
         fs.readdirSync(self.paths[0]);
       }).should.Throw(Error, 'ENOTDIR, not a directory ' + this.paths[0]);
-      testDone();
     });
 
-    it('should stub isFile/isDirectory when passed false', function(testDone) {
+    it('should stub isFile/isDirectory when passed false', function() {
       this.stubFile(this.paths[0]).make(); // Without paths.
       var stats = fs.statSync(this.paths[0]);
       stats.isDirectory().should.equal(false);
       stats.isFile().should.equal(true);
-      testDone();
     });
 
     it.skip('should update readdir from path string array', function(testDone) {
