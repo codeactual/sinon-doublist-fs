@@ -55,6 +55,19 @@ describe('FileStub', function() {
   });
 
   describe('#make', function() {
+    it('should stub exists', function(testDone) {
+      this.stubFile(this.paths[0]).make();
+      fs.exists(this.paths[0], function(exists) {
+        exists.should.equal(true);
+        testDone();
+      });
+    });
+
+    it('should stub existsSync', function() {
+      this.stubFile(this.paths[0]).make();
+      fs.existsSync(this.paths[0]).should.equal(true);
+    });
+
     it('should stub fs.statSync', function() {
       this.stubFile(this.paths[0]).make();
       assertDefaultsMatch(fs.statSync(this.paths[0]));
@@ -86,9 +99,6 @@ describe('FileStub', function() {
     it('should init parent name', function() {
       var stub = this.stubFile(this.paths[0]).make();
       stub.get('parentName').should.equal(path.dirname(this.paths[0]));
-    });
-
-    it.skip('should init readdir', function(testDone) {
     });
   });
 
@@ -148,16 +158,31 @@ describe('FileStub', function() {
       stats.isFile().should.equal(true);
     });
 
-    it.skip('should update readdir from path string array', function(testDone) {
+    it('should update readdir from path string array', function(testDone) {
+      var expected = ['a', 'b'];
+      this.stubFile(this.paths[0]).readdir(expected).make();
+      fs.readdirSync(this.paths[0]).should.deep.equal(expected);
+      fs.readdir(this.paths[0], function(err, files) {
+        files.should.deep.equal(expected);
+        testDone();
+      });
     });
 
-    it.skip('should init parent names from path string array', function(testDone) {
-    });
-
-    it.skip('should update readdir from FileStub array', function(testDone) {
-    });
-
-    it.skip('should init parent names from FileStub array', function(testDone) {
+    it('should update readdir from FileStub array', function(testDone) {
+      var expected = ['a', 'b'];
+      var readdir = [
+        this.paths[0] + '/' + expected[0],
+        this.paths[0] + '/' + expected[1]
+      ];
+      this.stubFile(this.paths[0]).readdir([
+        this.stubFile(readdir[0]),
+        this.stubFile(readdir[1])
+      ]).make();
+      fs.readdirSync(this.paths[0]).should.deep.equal(expected);
+      fs.readdir(this.paths[0], function(err, files) {
+        files.should.deep.equal(expected);
+        testDone();
+      });
     });
 
     it('should update stub map from FileStub array', function(testDone) {
