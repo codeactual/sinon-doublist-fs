@@ -240,6 +240,10 @@ the new root directory.
 
 > Finalize the `fs.{exists,lstat,stat,etc.}` stubs based on collected settings.
 
+**Return:**
+
+`{object}` this
+
 <sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
 
 # FileStub.prototype.unlink()

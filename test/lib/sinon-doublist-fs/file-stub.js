@@ -1,6 +1,7 @@
 /*jshint expr:true*/
 var T = require('../..');
 var fs = T.fs;
+var path = T.path;
 var should = T.should;
 
 describe('FileStub', function() {
@@ -82,7 +83,9 @@ describe('FileStub', function() {
       });
     });
 
-    it.skip('should init parent name', function(testDone) {
+    it('should init parent name', function() {
+      var stub = this.stubFile(this.paths[0]).make();
+      stub.get('parentName').should.equal(path.dirname(this.paths[0]));
     });
 
     it.skip('should init readdir', function(testDone) {
