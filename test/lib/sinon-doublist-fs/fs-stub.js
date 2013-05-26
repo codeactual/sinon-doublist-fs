@@ -59,7 +59,11 @@ describe('fs stub', function() {
   });
 
   describe('#unlink', function() {
-    it.skip('should remove itself from parent readdir', function(testDone) {
+    it('should remove itself from parent readdir', function() {
+      this.stubFile(this.paths[0]).readdir(['a']).make();
+      fs.readdirSync(this.paths[0]).should.deep.equal(['a']);
+      this.getFileStub(this.paths[0] + '/a').unlink();
+      fs.readdirSync(this.paths[0]).should.deep.equal([]);
     });
 
     it.skip('should update #existsSync result', function(testDone) {
@@ -160,7 +164,7 @@ describe('fs stub', function() {
       fs.existsSync(this.paths[0] + '/b').should.equal(true);
       fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
 
-      fs.readdirSync(this.paths[0] + '/b').should.deep.equal(['d', 'c']);
+      fs.readdirSync(this.paths[0] + '/b').should.deep.equal(['c']);
     });
 
     it.skip('should update parent name of children', function(testDone) {

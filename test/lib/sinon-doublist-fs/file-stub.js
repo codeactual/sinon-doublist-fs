@@ -185,6 +185,9 @@ describe('FileStub', function() {
       });
     });
 
+    it.skip('should update stub map from string array', function(testDone) {
+    });
+
     it('should update stub map from FileStub array', function(testDone) {
       /**
        * Create this tree:

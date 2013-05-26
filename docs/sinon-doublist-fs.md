@@ -6,7 +6,8 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 
 - <a name="toc_moduleexports"></a><a name="toc_module"></a>[module.exports](#moduleexports)
 - <a name="toc_sinondoublistfstest"></a>[sinonDoublistFs](#sinondoublistfstest)
-- <a name="toc_mixinstubfilename"></a><a name="toc_mixin"></a>[mixin.stubFile](#mixinstubfilename)
+- <a name="toc_mixingetfilestubname"></a><a name="toc_mixin"></a>[mixin.getFileStub](#mixingetfilestubname)
+- <a name="toc_mixinstubfilename"></a>[mixin.stubFile](#mixinstubfilename)
 - <a name="toc_mixinstubtreepaths"></a>[mixin.stubTree](#mixinstubtreepaths)
 - <a name="toc_mixinrestorefs"></a>[mixin.restoreFs](#mixinrestorefs)
 - <a name="toc_customfsstubrenamesyncoldpath-newpath"></a><a name="toc_customfsstub"></a>[customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
@@ -43,6 +44,20 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 <sub>Go: [TOC](#tableofcontents)</sub>
 
 <a name="mixin"></a>
+
+# mixin.getFileStub(name)
+
+> Retrieve an existing stub.
+
+**Parameters:**
+
+- `{string} name` Absolute path of file/directory w/out trailing slash
+
+**Return:**
+
+`{object}` [FileStub](#filestub) instance, or undefined if not found.
+
+<sub>Go: [TOC](#tableofcontents) | [mixin](#toc_mixin)</sub>
 
 # mixin.stubFile(name)
 
@@ -213,7 +228,8 @@ the new root directory.
 
 - `{boolean | array} paths`
   - `false`: revert to default `isFile()=true`
-  - `array`: [FileStub](#filestub) objects whose `make()` has not yet been called
+  - object `array`: [FileStub](#filestub) objects whose `make()` has not yet been called
+  - string `array`: Relative paths of direct descendants
 
 **Return:**
 
