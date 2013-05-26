@@ -58,24 +58,6 @@ describe('fs stub', function() {
     });
   });
 
-  describe('#unlink', function() {
-    it('should remove itself from parent readdir', function() {
-      this.stubFile(this.paths[0]).readdir(['a']).make();
-      fs.readdirSync(this.paths[0]).should.deep.equal(['a']);
-      this.getFileStub(this.paths[0] + '/a').unlink();
-      fs.readdirSync(this.paths[0]).should.deep.equal([]);
-    });
-
-    it.skip('should update #existsSync result', function(testDone) {
-    });
-
-    it.skip('should remove itself from stub map', function(testDone) {
-    });
-
-    it.skip('should call unlink on child stubs', function(testDone) {
-    });
-  });
-
   describe('#renameSync', function() {
     it.skip('should copy readFile buffers', function(testDone) {
     });

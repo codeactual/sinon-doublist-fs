@@ -10,7 +10,9 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 - <a name="toc_mixinstubfilename"></a>[mixin.stubFile](#mixinstubfilename)
 - <a name="toc_mixinstubtreepaths"></a>[mixin.stubTree](#mixinstubtreepaths)
 - <a name="toc_mixinrestorefs"></a>[mixin.restoreFs](#mixinrestorefs)
-- <a name="toc_customfsstubrenamesyncoldpath-newpath"></a><a name="toc_customfsstub"></a>[customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
+- <a name="toc_customfsstubexistsfilename-cb"></a><a name="toc_customfsstub"></a>[customFsStub.exists](#customfsstubexistsfilename-cb)
+- <a name="toc_customfsstubexistssyncfilename"></a>[customFsStub.existsSync](#customfsstubexistssyncfilename)
+- <a name="toc_customfsstubrenamesyncoldpath-newpath"></a>[customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
 - <a name="toc_customfsstubwritefilefilename-data-cb"></a>[customFsStub.writeFile](#customfsstubwritefilefilename-data-cb)
 - <a name="toc_customfsstubwritefilesyncfilename-data"></a>[customFsStub.writeFileSync](#customfsstubwritefilesyncfilename-data)
 - <a name="toc_filestub"></a>[FileStub](#filestub)
@@ -115,6 +117,31 @@ this.stubTree([
 <sub>Go: [TOC](#tableofcontents) | [mixin](#toc_mixin)</sub>
 
 <a name="customfsstub"></a>
+
+# customFsStub.exists(filename, cb)
+
+> Rely on the file stub map for existence checks.
+
+**Parameters:**
+
+- `{string} filename`
+- `{function} cb`
+
+<sub>Go: [TOC](#tableofcontents) | [customFsStub](#toc_customfsstub)</sub>
+
+# customFsStub.existsSync(filename)
+
+> Rely on the file stub map for existence checks.
+
+**Parameters:**
+
+- `{string} filename`
+
+**Return:**
+
+`{boolean}`
+
+<sub>Go: [TOC](#tableofcontents) | [customFsStub](#toc_customfsstub)</sub>
 
 # customFsStub.renameSync(oldPath, newPath)
 

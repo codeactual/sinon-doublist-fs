@@ -63,6 +63,11 @@ describe('FileStub', function() {
       });
     });
 
+    it('should update stub map', function() {
+      var actual = this.stubFile(this.paths[0]).make();
+      this.getFileStub(this.paths[0]).should.deep.equal(actual);
+    });
+
     it('should stub existsSync', function() {
       this.stubFile(this.paths[0]).make();
       fs.existsSync(this.paths[0]).should.equal(true);
@@ -235,6 +240,39 @@ describe('FileStub', function() {
       testDone();
     });
   });
+
+  describe('#unlink', function() {
+    it('should remove itself from parent readdir', function() {
+      this.stubFile(this.paths[0]).readdir(['a']).make();
+      fs.readdirSync(this.paths[0]).should.deep.equal(['a']);
+      this.getFileStub(this.paths[0] + '/a').unlink();
+      fs.readdirSync(this.paths[0]).should.deep.equal([]);
+    });
+
+    it('should update #existsSync result', function() {
+      var stub = this.stubFile(this.paths[0]).make();
+      stub.unlink();
+      fs.existsSync(this.paths[0]).should.equal(false);
+    });
+
+    it('should update #exists result', function(testDone) {
+      var stub = this.stubFile(this.paths[0]).make();
+      stub.unlink();
+      fs.exists(this.paths[0], function(exists) {
+        exists.should.equal(false);
+        testDone();
+      });
+    });
+
+    it('should update stub map', function() {
+      this.stubFile(this.paths[0]).make().unlink();
+      should.not.exist(this.getFileStub(this.paths[0]));
+    });
+
+    it.skip('should call unlink on child stubs', function(testDone) {
+    });
+  });
+
 });
 
 function assertDefaultsMatch(stats) {
