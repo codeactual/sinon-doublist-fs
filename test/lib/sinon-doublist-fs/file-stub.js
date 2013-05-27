@@ -269,9 +269,9 @@ function assertDefaultsMatch(stats) {
   stats.uid.should.equal(85);
   stats.gid.should.equal(100);
   stats.rdev.should.equal(0);
-  stats.size.should.equal(527);
+  stats.size.should.equal(0);
   stats.blksize.should.equal(4096);
-  stats.blocks.should.equal(8);
+  stats.blocks.should.equal(0);
   var time = 'Mon, 10 Oct 2011 23:24:11 GMT';
   stats.atime.should.equal(time);
   stats.mtime.should.equal(time);
