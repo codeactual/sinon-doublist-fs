@@ -190,22 +190,22 @@ describe('FileStub', function() {
       });
     });
 
-    it.skip('should update stub map from string array', function(testDone) {
+    it('should make stubs from string array', function() {
+      this.stubFile(this.paths[0]).readdir(['a']).make();
+      this.getFileStub(this.paths[0] + '/a').should.be.a('object');
     });
 
-    it('should update stub map from FileStub array', function(testDone) {
-      /**
-       * Create this tree:
-       *
-       * /a
-       * /a/b
-       * /a/b2
-       * /a2
-       * /a3
-       * /a3/b4
-       * /a3/b4/c
-       *
-       */
+    it('should make stubs from FileStub array', function() {
+      var self = this;
+      var expected = [
+        '/a',
+        '/a/b',
+        '/a/b2',
+        '/a2',
+        '/a3',
+        '/a3/b4',
+        '/a3/b4/c'
+      ];
       this.stubFile(this.paths[0]).readdir([
         this.stubFile(this.paths[0] + '/a').readdir([
           this.stubFile(this.paths[0] + '/a/b'),
@@ -218,26 +218,9 @@ describe('FileStub', function() {
           ])
         ])
       ]).make();
-
-      // Verify file types and directory contents.
-      fs.statSync(this.paths[0] + '/a').isDirectory().should.equal(true);
-      fs.readdirSync(this.paths[0] + '/a').should.deep.equal([
-        'b',
-        'b2'
-      ]);
-      fs.statSync(this.paths[0] + '/a/b').isFile().should.equal(true);
-      fs.statSync(this.paths[0] + '/a/b2').isFile().should.equal(true);
-      fs.statSync(this.paths[0] + '/a2').isFile().should.equal(true);
-      fs.statSync(this.paths[0] + '/a3').isDirectory().should.equal(true);
-      fs.readdirSync(this.paths[0] + '/a3').should.deep.equal([
-        'b4'
-      ]);
-      fs.statSync(this.paths[0] + '/a3/b4').isDirectory().should.equal(true);
-      fs.readdirSync(this.paths[0] + '/a3/b4').should.deep.equal([
-        'c'
-      ]);
-      fs.statSync(this.paths[0] + '/a3/b4/c').isFile().should.equal(true);
-      testDone();
+      expected.forEach(function(file) {
+        self.getFileStub(self.paths[0] + file).should.be.a('object');
+      });
     });
   });
 
@@ -269,7 +252,10 @@ describe('FileStub', function() {
       should.not.exist(this.getFileStub(this.paths[0]));
     });
 
-    it.skip('should call unlink on child stubs', function(testDone) {
+    it('should unlink child stubs', function() {
+      this.stubFile(this.paths[0]).readdir(['a']).make().unlink();
+      fs.existsSync(this.paths[0]).should.equal(false);
+      fs.existsSync(this.paths[0] + '/a').should.equal(false);
     });
   });
 

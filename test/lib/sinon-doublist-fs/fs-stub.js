@@ -59,7 +59,11 @@ describe('fs stub', function() {
   });
 
   describe('#renameSync', function() {
-    it.skip('should copy readFile buffers', function(testDone) {
+    it('should copy readFile buffers', function() {
+      var src = this.stubFile(this.paths[0]).buffer('txt').make();
+      var dst = this.stubFile(this.paths[1]).make();
+      fs.renameSync(this.paths[0], this.paths[1]);
+      fs.readFileSync(this.paths[1]).toString().should.equal('txt');
     });
 
     it('should rename copied dir descendants', function() {
@@ -149,25 +153,42 @@ describe('fs stub', function() {
       fs.readdirSync(this.paths[0] + '/b').should.deep.equal(['c']);
     });
 
-    it.skip('should update parent name of children', function(testDone) {
+    it('should update parent name of children', function() {
+      this.stubFile(this.paths[0]).readdir(['a']).make();
+      fs.renameSync(this.paths[0] + '/a', this.paths[0] + '/b');
+      fs.readdirSync(this.paths[0]).should.deep.equal(['b']);
     });
 
-    it.skip('should retain child meta', function(testDone) {
-      // name
-      // parent name (should be the parent's new name)
-      // size
+    it('should retain meta', function() {
+      this.stubFile(this.paths[0]).stat('size', 1024).make();
+      fs.renameSync(this.paths[0], this.paths[1]);
+      fs.statSync(this.paths[1]).size.should.equal(1024);
     });
 
-    it.skip('should update meta', function(testDone) {
-      // name
-      // parent name
-      // size
+    it('should retain child meta', function() {
+      this.stubFile(this.paths[0]).readdir([
+        this.stubFile(this.paths[0] + '/a').stat('size', 1024)
+      ]);
+      fs.renameSync(this.paths[0] + '/a', this.paths[0] + '/b');
+      fs.statSync(this.paths[0] + '/b').size.should.equal(1024);
     });
 
-    it.skip('should update after overwrite', function(testDone) {
-      // name
-      // parent name
-      // size
+    it('should retain meta after overwrite', function() {
+      this.stubFile(this.paths[0]).stat('size', 1024).make();
+      this.stubFile(this.paths[1]).make();
+      fs.renameSync(this.paths[0], this.paths[1]);
+      fs.statSync(this.paths[1]).size.should.equal(1024);
+    });
+
+    it('should retain child meta after overwrite', function() {
+      this.stubFile(this.paths[0]).readdir([
+        this.stubFile(this.paths[0] + '/a').stat('size', 1024)
+      ]).make();
+      this.stubFile(this.paths[1]).readdir([
+        this.stubFile(this.paths[1] + '/a')
+      ]).make();
+      fs.renameSync(this.paths[0], this.paths[1]);
+      fs.statSync(this.paths[1] + '/a').size.should.equal(1024);
     });
   });
 });
