@@ -21,6 +21,8 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 - <a name="toc_wrapfsrenamesyncoldpath-newpath"></a>[wrapFs.renameSync](#wrapfsrenamesyncoldpath-newpath)
 - <a name="toc_wrapfsstatfilename-cb"></a>[wrapFs.stat](#wrapfsstatfilename-cb)
 - <a name="toc_wrapfsstatsyncfilename"></a>[wrapFs.statSync](#wrapfsstatsyncfilename)
+- <a name="toc_wrapfsunlinkfilename-cb"></a>[wrapFs.unlink](#wrapfsunlinkfilename-cb)
+- <a name="toc_wrapfsunlinksyncfilename"></a>[wrapFs.unlinkSync](#wrapfsunlinksyncfilename)
 - <a name="toc_wrapfswritefilefilename-data-cb"></a>[wrapFs.writeFile](#wrapfswritefilefilename-data-cb)
 - <a name="toc_wrapfswritefilesyncfilename-data"></a>[wrapFs.writeFileSync](#wrapfswritefilesyncfilename-data)
 - <a name="toc_filestub"></a>[FileStub](#filestub)
@@ -252,6 +254,31 @@ this.stubTree([
 # wrapFs.statSync(filename)
 
 > Rely on the file stub map for stat objects.
+
+**Parameters:**
+
+- `{string} filename`
+
+**Return:**
+
+`{boolean}`
+
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
+
+# wrapFs.unlink(filename, cb)
+
+> Remove the associated file stub.
+
+**Parameters:**
+
+- `{string} filename`
+- `{function} cb`
+
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
+
+# wrapFs.unlinkSync(filename)
+
+> Remove the associated file stub.
 
 **Parameters:**
 

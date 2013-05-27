@@ -191,5 +191,25 @@ describe('fs stub', function() {
       fs.statSync(this.paths[1] + '/a').size.should.equal(1024);
     });
   });
+
+  describe('#unlink', function() {
+    it('should remove stub', function(testDone) {
+      var self = this;
+      this.stubFile(this.paths[0]).make();
+      fs.unlink(this.paths[0], function(err) {
+        should.equal(err, null);
+        fs.existsSync(self.paths[0]).should.equal(false);
+        testDone();
+      });
+    });
+  });
+
+  describe('#unlinkSync', function() {
+    it('should detect stub', function() {
+      this.stubFile(this.paths[0]).make();
+      fs.unlinkSync(this.paths[0]);
+      fs.existsSync(this.paths[0]).should.equal(false);
+    });
+  });
 });
 
