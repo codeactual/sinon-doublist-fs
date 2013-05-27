@@ -1,3 +1,13 @@
+# 0.4.0
+
+* Add `unlink*()` wrappers
+* By default, fallback on real `fs` methods if file stub not found.
+* By default, set stub `size/blocks` values to `0`.
+* Fix:
+  * `parentName` updating
+  * `fs.Stats` copying during `renameSync()`
+  * `readdir*()` payload after `renameSync()`
+
 # 0.3.1
 
 * chore(npm): Upgrade outdated dependencies

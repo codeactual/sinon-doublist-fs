@@ -28,11 +28,11 @@ describe('myFunction', function() {
     sinonDoublist(sinon, this);
     sinonDoublistFs(this);
   });
-  
+
   afterEach(function() {
     this.sandbox.restore();
   });
-  
+
   it('should do something', function() {
     // this.spyFile()
     // this.stubTree()
@@ -91,27 +91,26 @@ this.stubTree([
 ]);
 ```
 
-## `fs.*` Stub Behaviors
+## `fs` coverage
 
-_`stubFile()` and `stubTree()` internally prepare the responses of these `fs` methods._
+File stubs created by `stubFile() / stubTree()`, and configured via `.stat()` and others, will be reflected/modifiable by:
 
-### `fs.writeFile*`, `fs.readFile*`
+* `fs.writeFile*`
+* `fs.readFile*`
+  * Writes can also be faked via [FileStub#buffer()](docs/sinon-doublist-fs.md).
+* `fs.exists*`
+* `fs.readdir*`
+* `fs.stat* / fs.lstat*`
+  * Including `isFile() / isDirectory()` responses
+* `fs.unlink*`
+* `fs.renameSync`
 
-> Writes will be captured and made available to later reads.
+If a file stub does not exist for a given path, we fallback to the real `fs` method. To override this behavior:
 
-Writes can also be made via [FileStub#buffer()](docs/sinon-doublist-fs.md).
-
-### `fs.exists*`
-
-> Responds with `false` for a given path until an associated stub is finalized by [FileStub#make()](docs/sinon-doublist-fs.md).
-
-### `fs.readdir*`. `isFile()`, `isDirectory()`
-
-> Based on paths (if any) passed to [FileStub#readdir()](docs/sinon-doublist-fs.md).
-
-### `fs.stat*` and `fs.lstat*`
-
-> Responds with `fs.Stats` properties configured via [FileStub#stat()](docs/sinon-doublist-fs.md).
+* `sinonDoublistFs.realFsFallback = 0`
+  * Do nothing (async methods will hang).
+* `sinonDoublistFs.realFsFallback = 2`
+  * Throw an `Error`, ex. `existsSync, no such file stub '/path/to/file'`
 
 ## Installation
 
