@@ -10,11 +10,19 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 - <a name="toc_mixinstubfilename"></a>[mixin.stubFile](#mixinstubfilename)
 - <a name="toc_mixinstubtreepaths"></a>[mixin.stubTree](#mixinstubtreepaths)
 - <a name="toc_mixinrestorefs"></a>[mixin.restoreFs](#mixinrestorefs)
-- <a name="toc_customfsstubexistsfilename-cb"></a><a name="toc_customfsstub"></a>[customFsStub.exists](#customfsstubexistsfilename-cb)
-- <a name="toc_customfsstubexistssyncfilename"></a>[customFsStub.existsSync](#customfsstubexistssyncfilename)
-- <a name="toc_customfsstubrenamesyncoldpath-newpath"></a>[customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
-- <a name="toc_customfsstubwritefilefilename-data-cb"></a>[customFsStub.writeFile](#customfsstubwritefilefilename-data-cb)
-- <a name="toc_customfsstubwritefilesyncfilename-data"></a>[customFsStub.writeFileSync](#customfsstubwritefilesyncfilename-data)
+- <a name="toc_wrapfsexistsfilename-cb"></a><a name="toc_wrapfs"></a>[wrapFs.exists](#wrapfsexistsfilename-cb)
+- <a name="toc_wrapfsexistssyncfilename"></a>[wrapFs.existsSync](#wrapfsexistssyncfilename)
+- <a name="toc_wrapfslstatfilename-cb"></a>[wrapFs.lstat](#wrapfslstatfilename-cb)
+- <a name="toc_wrapfslstatsyncfilename"></a>[wrapFs.lstatSync](#wrapfslstatsyncfilename)
+- <a name="toc_wrapfsreadfilefilename-args"></a>[wrapFs.readFile](#wrapfsreadfilefilename-args)
+- <a name="toc_wrapfsreadfilesyncfilename-options"></a>[wrapFs.readFileSync](#wrapfsreadfilesyncfilename-options)
+- <a name="toc_wrapfsreaddirfilename-cb"></a>[wrapFs.readdir](#wrapfsreaddirfilename-cb)
+- <a name="toc_wrapfsreaddirsyncfilename"></a>[wrapFs.readdirSync](#wrapfsreaddirsyncfilename)
+- <a name="toc_wrapfsrenamesyncoldpath-newpath"></a>[wrapFs.renameSync](#wrapfsrenamesyncoldpath-newpath)
+- <a name="toc_wrapfsstatfilename-cb"></a>[wrapFs.stat](#wrapfsstatfilename-cb)
+- <a name="toc_wrapfsstatsyncfilename"></a>[wrapFs.statSync](#wrapfsstatsyncfilename)
+- <a name="toc_wrapfswritefilefilename-data-cb"></a>[wrapFs.writeFile](#wrapfswritefilefilename-data-cb)
+- <a name="toc_wrapfswritefilesyncfilename-data"></a>[wrapFs.writeFileSync](#wrapfswritefilesyncfilename-data)
 - <a name="toc_filestub"></a>[FileStub](#filestub)
 - <a name="toc_filestubprototypebufferbuffer"></a><a name="toc_filestubprototype"></a>[FileStub.prototype.buffer](#filestubprototypebufferbuffer)
 - <a name="toc_filestubprototypemapcb"></a>[FileStub.prototype.map](#filestubprototypemapcb)
@@ -28,7 +36,7 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 
 # module.exports()
 
-> Reference to `sinonDoublistfs()`.
+> Reference to `sinonDoublistFs()`.
 
 <sub>Go: [TOC](#tableofcontents) | [module](#toc_module)</sub>
 
@@ -116,9 +124,9 @@ this.stubTree([
 
 <sub>Go: [TOC](#tableofcontents) | [mixin](#toc_mixin)</sub>
 
-<a name="customfsstub"></a>
+<a name="wrapfs"></a>
 
-# customFsStub.exists(filename, cb)
+# wrapFs.exists(filename, cb)
 
 > Rely on the file stub map for existence checks.
 
@@ -127,9 +135,9 @@ this.stubTree([
 - `{string} filename`
 - `{function} cb`
 
-<sub>Go: [TOC](#tableofcontents) | [customFsStub](#toc_customfsstub)</sub>
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
 
-# customFsStub.existsSync(filename)
+# wrapFs.existsSync(filename)
 
 > Rely on the file stub map for existence checks.
 
@@ -141,9 +149,85 @@ this.stubTree([
 
 `{boolean}`
 
-<sub>Go: [TOC](#tableofcontents) | [customFsStub](#toc_customfsstub)</sub>
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
 
-# customFsStub.renameSync(oldPath, newPath)
+# wrapFs.lstat(filename, cb)
+
+> Rely on the file stub map for stat objects.
+
+**Parameters:**
+
+- `{string} filename`
+- `{function} cb`
+
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
+
+# wrapFs.lstatSync(filename)
+
+> Rely on the file stub map for stat objects.
+
+**Parameters:**
+
+- `{string} filename`
+
+**Return:**
+
+`{boolean}`
+
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
+
+# wrapFs.readFile(filename, args*)
+
+> Rely on the file stub map for buffer retrieval.
+
+**Parameters:**
+
+- `{string} filename`
+- `{mixed} args*`
+
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
+
+# wrapFs.readFileSync(filename, [options])
+
+> Rely on the file stub map for buffer retrieval.
+
+**Parameters:**
+
+- `{string} filename`
+- `{object} [options]`
+
+**Return:**
+
+`{boolean}`
+
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
+
+# wrapFs.readdir(filename, cb)
+
+> Rely on the file stub map for readdir list.
+
+**Parameters:**
+
+- `{string} filename`
+- `{function} cb`
+
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
+
+# wrapFs.readdirSync(filename)
+
+> Rely on the file stub map for readdir list.
+
+**Parameters:**
+
+- `{string} filename`
+
+**Return:**
+
+`{boolean}`
+
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
+
+# wrapFs.renameSync(oldPath, newPath)
 
 > Clone the file stub and remove the old one.
 
@@ -152,9 +236,34 @@ this.stubTree([
 - `{string} oldPath`
 - `{string} newPath`
 
-<sub>Go: [TOC](#tableofcontents) | [customFsStub](#toc_customfsstub)</sub>
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
 
-# customFsStub.writeFile(filename, data, cb)
+# wrapFs.stat(filename, cb)
+
+> Rely on the file stub map for stat objects.
+
+**Parameters:**
+
+- `{string} filename`
+- `{function} cb`
+
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
+
+# wrapFs.statSync(filename)
+
+> Rely on the file stub map for stat objects.
+
+**Parameters:**
+
+- `{string} filename`
+
+**Return:**
+
+`{boolean}`
+
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
+
+# wrapFs.writeFile(filename, data, cb)
 
 > Save a buffer for later retrieval by `fs.readFile*`.
 
@@ -164,9 +273,9 @@ this.stubTree([
 - `{string | object} data` `String` or `Buffer` instance
 - `{function} cb`
 
-<sub>Go: [TOC](#tableofcontents) | [customFsStub](#toc_customfsstub)</sub>
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
 
-# customFsStub.writeFileSync(filename, data)
+# wrapFs.writeFileSync(filename, data)
 
 > Save a buffer for later retrieval by `fs.readFile*`.
 
@@ -175,7 +284,7 @@ this.stubTree([
 - `{string} filename`
 - `{string | object} data` `String` or `Buffer` instance
 
-<sub>Go: [TOC](#tableofcontents) | [customFsStub](#toc_customfsstub)</sub>
+<sub>Go: [TOC](#tableofcontents) | [wrapFs](#toc_wrapfs)</sub>
 
 # FileStub()
 
@@ -243,7 +352,7 @@ the new root directory.
 **See:**
 
 - [FileStub.prototype.map](#filestubprototypemapcb)
-- [customFsStub.renameSync](#customfsstubrenamesyncoldpath-newpath)
+- [wrapFs.renameSync](#wrapfsrenamesyncoldpath-newpath)
 
 <sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
 
