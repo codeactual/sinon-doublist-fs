@@ -97,7 +97,7 @@ File stubs created by `stubFile() / stubTree()`, and configured via `.stat()` an
 
 * `fs.writeFile*`
 * `fs.readFile*`
-  * Writes can also be faked via [FileStub#buffer()](docs/sinon-doublist-fs.md).
+  * Writes can also be faked via [FileStub#buffer()](docs/sinonDoublistFs.md).
 * `fs.exists*`
 * `fs.readdir*`
 * `fs.stat* / fs.lstat*`
@@ -120,7 +120,7 @@ If a file stub does not exist for a given path, we fallback to the real `fs` met
 
 ## API
 
-[Documentation](docs/sinon-doublist-fs.md)
+[Documentation](docs/sinonDoublistFs.md)
 
 ## License
 
