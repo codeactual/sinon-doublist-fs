@@ -28,6 +28,7 @@
     "url": "https://github.com/codeactual/sinon-doublist-fs.git"
   },
   "peerDependencies": {
+    "sinon": "~1.7.2",
     "sinon-doublist": "~0.4.1"
   },
   "dependencies": {
