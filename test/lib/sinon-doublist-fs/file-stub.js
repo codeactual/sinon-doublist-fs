@@ -5,6 +5,13 @@ var path = T.path;
 var should = T.should;
 
 describe('FileStub', function() {
+  describe('#getFileStub', function() {
+    it('should drop trailing slash', function() {
+      var actual = this.stubFile(this.paths[0]).make();
+      this.getFileStub(this.paths[0] + '/').should.deep.equal(actual);
+    });
+  });
+
   describe('#stubTree', function() {
     it('should fill in missing intermediate dirs', function() {
       var incomplete = [
@@ -73,6 +80,12 @@ describe('FileStub', function() {
     it('should update stub map', function() {
       var actual = this.stubFile(this.paths[0]).make();
       this.getFileStub(this.paths[0]).should.deep.equal(actual);
+    });
+
+    it('should not use trailing slash in stub map', function() {
+      var actual = this.stubFile(this.paths[0] + '/').make();
+      this.getFileStub(this.paths[0]).should.deep.equal(actual);
+      fs.existsSync(this.paths[0] + '/').should.equal(false);
     });
 
     it('should stub existsSync', function() {
