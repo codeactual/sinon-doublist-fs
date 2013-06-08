@@ -50,6 +50,7 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 **Parameters:**
 
 - `{string} name` Absolute path of file/directory w/out trailing slash
+  - Trailing slashes will be dropped.
 
 **Return:**
 
@@ -134,6 +135,7 @@ stub
 **Configuration:**
 
 - `{string} name` Absolute path w/out trailing slash
+  - Trailing slashes will be dropped.
 - `{boolean|array} readdir` Names of direct descendant files/directories
   - `false` will lead to `isFile()` returning `true`
 - `{string} parentName` Absolute path w/out trailing slash
