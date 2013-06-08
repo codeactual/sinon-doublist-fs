@@ -52,6 +52,13 @@ describe('FileStub', function() {
       fs.readdirSync('/root/d1').should.deep.equal(['f1.js']);
       fs.statSync('/root/d1/f1.js').isFile().should.deep.equal(true);
     });
+
+    it('should recognize trailing slash as empty dir', function() {
+      var dir = '/root/d1/d2';
+      this.stubTree([dir + '/']);
+      fs.readdirSync(dir).should.deep.equal([]);
+      fs.statSync(dir).isDirectory().should.equal(true);
+    });
   });
 
   describe('#make', function() {
@@ -221,6 +228,11 @@ describe('FileStub', function() {
       expected.forEach(function(file) {
         self.getFileStub(self.paths[0] + file).should.be.a('object');
       });
+    });
+
+    it('should make empty dir from empty array', function() {
+      this.stubFile(this.paths[0]).readdir([]).make();
+      fs.statSync(this.paths[0]).isDirectory().should.equal(true);
     });
   });
 

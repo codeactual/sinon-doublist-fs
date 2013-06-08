@@ -18,6 +18,7 @@ _Source: [lib/sinon-doublist-fs/index.js](../lib/sinon-doublist-fs/index.js)_
 - <a name="toc_filestubprototypestatkey-val"></a>[FileStub.prototype.stat](#filestubprototypestatkey-val)
 - <a name="toc_filestubprototypemake"></a>[FileStub.prototype.make](#filestubprototypemake)
 - <a name="toc_filestubprototypeunlink"></a>[FileStub.prototype.unlink](#filestubprototypeunlink)
+- <a name="toc_filestubprototypeunlinkreaddir"></a>[FileStub.prototype.unlinkReaddir](#filestubprototypeunlinkreaddir)
 
 <a name="module"></a>
 
@@ -226,6 +227,12 @@ the new root directory.
 # FileStub.prototype.unlink()
 
 > Undo a prior `make()`.
+
+<sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
+
+# FileStub.prototype.unlinkReaddir()
+
+> Unlink stub's readdir list.
 
 <sub>Go: [TOC](#tableofcontents) | [FileStub.prototype](#toc_filestubprototype)</sub>
 
