@@ -103,7 +103,8 @@ this.stubTree([
 
 **Parameters:**
 
-- `{string | array} paths` File/directory absolute paths w/out trailing slashes
+- `{string | array} paths` File/directory absolute paths
+  - Use a trailing slash to indicate an empty directory.
 
 <sub>Go: [TOC](#tableofcontents) | [mixin](#toc_mixin)</sub>
 
