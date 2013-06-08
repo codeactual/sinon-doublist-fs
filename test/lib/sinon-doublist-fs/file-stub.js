@@ -66,6 +66,13 @@ describe('FileStub', function() {
       fs.readdirSync(dir).should.deep.equal([]);
       fs.statSync(dir).isDirectory().should.equal(true);
     });
+
+    it('should accept string argument', function() {
+      var dir = '/root/d1/d2';
+      this.stubTree(dir);
+      this.getFileStub(dir).get('name').should.equal(dir);
+      fs.existsSync(dir).should.equal(true);
+    });
   });
 
   describe('#make', function() {

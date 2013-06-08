@@ -93,6 +93,7 @@ Any missing ancestor directories will be created automatically.
 **Usage:**
 
 ```js
+this.stubTree('/root/a/b2');
 this.stubTree([
   '/root/a/b2',
   '/root/a2',
@@ -102,7 +103,7 @@ this.stubTree([
 
 **Parameters:**
 
-- `{array} paths` File/directory absolute paths w/out trailing slashes
+- `{string | array} paths` File/directory absolute paths w/out trailing slashes
 
 <sub>Go: [TOC](#tableofcontents) | [mixin](#toc_mixin)</sub>
 
