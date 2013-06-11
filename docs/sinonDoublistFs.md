@@ -192,8 +192,9 @@ the new root directory.
 
 **Parameters:**
 
-- `{boolean | array} paths`
+- `{string | boolean | array} paths`
   - `false`: revert to default `isFile()=true`
+  - `string`: Relative path of one direct descendant
   - object `array`: [FileStub](#filestub) objects whose `make()` has not yet been called
   - string `array`: Relative paths of direct descendants
 

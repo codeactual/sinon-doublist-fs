@@ -190,6 +190,16 @@ describe('FileStub', function() {
       stats.isFile().should.equal(true);
     });
 
+    it('should update readdir from path string', function(testDone) {
+      var expected = ['a'];
+      this.stubFile(this.paths[0]).readdir(expected[0]).make();
+      fs.readdirSync(this.paths[0]).should.deep.equal(expected);
+      fs.readdir(this.paths[0], function(err, files) {
+        files.should.deep.equal(expected);
+        testDone();
+      });
+    });
+
     it('should update readdir from path string array', function(testDone) {
       var expected = ['a', 'b'];
       this.stubFile(this.paths[0]).readdir(expected).make();

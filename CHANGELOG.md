@@ -1,3 +1,7 @@
+# 0.4.2
+
+- feat(FileStub#readdir): Accept a string argument for single-descendant case
+
 # 0.4.1
 
 - feat(FileStub#stubFile): Detect empty dir names based on trailing slash
