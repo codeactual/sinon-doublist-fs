@@ -25,6 +25,14 @@ describe('fs stub', function() {
         });
       });
     });
+
+    it('should trim leading slashes', function(testDone) {
+      this.stubTree('/root/a/index.js');
+      fs.exists('/root/a/', function(exists) {
+        exists.should.equal(true);
+        testDone();
+      });
+    });
   });
 
   describe('#existsSync', function() {
@@ -35,6 +43,11 @@ describe('fs stub', function() {
       this.stubFile(this.paths[1]).make();
       should.equal(fs.existsSync(this.paths[0]), true);
       should.equal(fs.existsSync(this.paths[1]), true);
+    });
+
+    it('should trim leading slashes', function() {
+      this.stubTree('/root/a/index.js');
+      fs.existsSync('/root/a/').should.equal(true);
     });
   });
 
@@ -190,6 +203,12 @@ describe('fs stub', function() {
       fs.renameSync(this.paths[0], this.paths[1]);
       fs.statSync(this.paths[1] + '/a').size.should.equal(1024);
     });
+
+    it('should trim leading slashes', function() {
+      this.stubTree(['/root/a/index.js', '/root/b/']);
+      fs.renameSync('/root/a/', '/root/b/');
+      fs.existsSync('/root/b/index.js').should.equal(true);
+    });
   });
 
   describe('#unlink', function() {
@@ -202,6 +221,14 @@ describe('fs stub', function() {
         testDone();
       });
     });
+
+    it('should trim leading slashes', function(testDone) {
+      this.stubTree('/root/a/index.js');
+      fs.unlink('/root/a/', function() {
+        fs.existsSync('/root/a/').should.equal(false);
+        testDone();
+      });
+    });
   });
 
   describe('#unlinkSync', function() {
@@ -209,6 +236,63 @@ describe('fs stub', function() {
       this.stubFile(this.paths[0]).make();
       fs.unlinkSync(this.paths[0]);
       fs.existsSync(this.paths[0]).should.equal(false);
+    });
+
+    it('should trim leading slashes', function() {
+      this.stubTree('/root/a/index.js');
+      fs.unlinkSync('/root/a/');
+      fs.existsSync('/root/a/').should.equal(false);
+    });
+  });
+
+  describe('#readdir', function() {
+    it('should trim leading slashes', function(testDone) {
+      this.stubTree('/root/a/index.js');
+      fs.readdir('/root/a/', function(err, readdir) {
+        readdir.should.deep.equal(['index.js']);
+        testDone();
+      });
+    });
+  });
+
+  describe('#readdirSync', function() {
+    it('should trim leading slashes', function() {
+      this.stubTree('/root/a/index.js');
+      fs.readdirSync('/root/a/').should.deep.equal(['index.js']);
+    });
+  });
+
+  describe('#lstat', function() {
+    it('should trim leading slashes', function(testDone) {
+      this.stubTree('/root/a/index.js');
+      fs.lstat('/root/a/', function(err, stats) {
+        stats.isDirectory().should.equal(true);
+        testDone();
+      });
+    });
+  });
+
+  describe('#lstatSync', function() {
+    it('should trim leading slashes', function() {
+      this.stubTree('/root/a/index.js');
+      fs.lstatSync('/root/a/').isDirectory().should.equal(true);
+    });
+  });
+
+  describe('#stat', function() {
+    it('should trim leading slashes', function(testDone) {
+      this.stubTree('/root/a/index.js');
+      fs.stat('/root/a/', function(err, stats) {
+        stats.isDirectory().should.equal(true);
+        testDone();
+      });
+    });
+  });
+
+  describe('#statSync', function() {
+    it('should trim leading slashes', function() {
+      this.stubTree('/root/a/index.js');
+      fs.statSync('/root/a/').isDirectory().should.equal(true);
     });
   });
 });

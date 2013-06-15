@@ -92,7 +92,8 @@ describe('FileStub', function() {
     it('should not use trailing slash in stub map', function() {
       var actual = this.stubFile(this.paths[0] + '/').make();
       this.getFileStub(this.paths[0]).should.deep.equal(actual);
-      fs.existsSync(this.paths[0] + '/').should.equal(false);
+      fs.existsSync(this.paths[0]).should.equal(true);
+      fs.existsSync(this.paths[0] + '/').should.equal(true);
     });
 
     it('should stub existsSync', function() {
