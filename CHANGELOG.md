@@ -1,10 +1,7 @@
-# 0.4.3
-
-- fix(fs stub): Support trailing slashes in `exists*`, `renameSync`, `unlink*`, `readdir*`, `lstat*`, `stat*`
-
 # 0.4.2
 
 - feat(FileStub#readdir): Accept a string argument for single-descendant case
+- fix(fs stub): Support trailing slashes in `exists*`, `renameSync`, `unlink*`, `readdir*`, `lstat*`, `stat*`
 
 # 0.4.1
 
