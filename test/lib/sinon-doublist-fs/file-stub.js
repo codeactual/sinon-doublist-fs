@@ -184,6 +184,16 @@ describe('FileStub', function() {
       }).should.Throw(Error, 'ENOTDIR, not a directory ' + this.paths[0]);
     });
 
+    it('should stub readdir when passed false', function(testDone) {
+      var self = this;
+      this.stubFile(this.paths[0]).readdir(false).make();
+      fs.readdir(self.paths[0], function(err, readdir) {
+        err.should.be.instanceOf(Error);
+        err.message.should.equal('ENOTDIR, not a directory ' + self.paths[0]);
+        testDone();
+      });
+    });
+
     it('should stub isFile/isDirectory when passed false', function() {
       this.stubFile(this.paths[0]).make(); // Without paths.
       var stats = fs.statSync(this.paths[0]);

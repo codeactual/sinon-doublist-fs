@@ -1,3 +1,7 @@
+# 0.4.3
+
+- fix(fs stub, readdir): Pass `ENOTDIR` to callback, instead of throwing, to match `fs`
+
 # 0.4.2
 
 - feat(FileStub#readdir): Accept a string argument for single-descendant case
