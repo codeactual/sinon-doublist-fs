@@ -1,5 +1,6 @@
 # 0.4.4
 
+- ix(fs wrappers): Wrap all callbacks w/ setImmediate
 - chore(deps): Update NPM dev dependencies
 
 # 0.4.3
