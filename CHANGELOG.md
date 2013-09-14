@@ -1,3 +1,7 @@
+# 0.4.4
+
+- chore(deps): Update NPM dev dependencies
+
 # 0.4.3
 
 - fix(fs stub, readdir): Pass `ENOTDIR` to callback, instead of throwing, to match `fs`
