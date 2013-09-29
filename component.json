@@ -2,7 +2,7 @@
   "name": "sinon-doublist-fs",
   "repo": "codeactual/sinon-doublist",
   "description": "node.js fs mixins for sinon-doublist",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "keywords": [
     "sinon",
     "test",
