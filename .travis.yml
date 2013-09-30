@@ -2,4 +2,4 @@ language: node_js
 node_js:
   - "0.10"
 before_script:
-  - npm install grunt-cli sinon@1.7.3 sinon-doublist@0.4.1
+  - npm install grunt-cli sinon@1.7.3 sinon-doublist@0.4.2

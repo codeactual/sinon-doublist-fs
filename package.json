@@ -29,7 +29,7 @@
   },
   "peerDependencies": {
     "sinon": "~1.7.3",
-    "sinon-doublist": "~0.4.1"
+    "sinon-doublist": "~0.4.2"
   },
   "dependencies": {
     "long-con": "~0.1.3"

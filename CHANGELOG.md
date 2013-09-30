@@ -1,3 +1,7 @@
+# 0.4.6
+
+- chore(deps): Upgrade sinon-doublist peer dependency to `0.4.2`
+
 # 0.4.5
 
 - fix(writeFile): Detect `options` argument
