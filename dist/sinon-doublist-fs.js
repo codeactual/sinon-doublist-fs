@@ -167,9 +167,6 @@
         var toString = Object.prototype.toString;
         module.exports = function(val) {
             switch (toString.call(val)) {
-              case "[object Function]":
-                return "function";
-
               case "[object Date]":
                 return "date";
 
@@ -182,14 +179,14 @@
               case "[object Array]":
                 return "array";
 
-              case "[object String]":
-                return "string";
+              case "[object Error]":
+                return "error";
             }
             if (val === null) return "null";
             if (val === undefined) return "undefined";
+            if (val !== val) return "nan";
             if (val && val.nodeType === 1) return "element";
-            if (val === Object(val)) return "object";
-            return typeof val;
+            return typeof val.valueOf();
         };
     });
     require.register("component-clone/index.js", function(exports, require, module) {
@@ -289,7 +286,7 @@
     if (typeof exports == "object") {
         module.exports = require("sinon-doublist-fs");
     } else if (typeof define == "function" && define.amd) {
-        define(function() {
+        define([], function() {
             return require("sinon-doublist-fs");
         });
     } else {
