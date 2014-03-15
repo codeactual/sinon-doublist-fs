@@ -1,3 +1,8 @@
+# 0.4.7
+
+- fix(FileStub#readdir): Convert string input to array
+- chore(npm): Upgrade outdated dependencies
+
 # 0.4.6
 
 - chore(deps): Upgrade sinon-doublist peer dependency to `0.4.2`
