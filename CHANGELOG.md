@@ -1,3 +1,8 @@
+# 0.5.0
+
+- fix(sinon-doublist): Upgrade peer dependency to `0.5.0` to no longer use fake timers by default
+- chore(pkg): Upgrade outdated dependencies
+
 # 0.4.7
 
 - fix(FileStub#readdir): Convert string input to array

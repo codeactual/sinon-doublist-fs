@@ -18,9 +18,6 @@ beforeEach(function(hookDone) {
   T.sinonDoublist(T.sinon, this);
   T.sinonDoublistFs(this);
 
-  // For setImmediate use in sinon-doublist (e.g. fs.exists stub).
-  this.clock.restore();
-
   this.paths = ['/foo', '/bar'];
   this.strings = ['walking', 'dead'];
   this.buffers = [new Buffer(this.strings[0]), new Buffer(this.strings[1])];

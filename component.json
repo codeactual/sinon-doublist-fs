@@ -2,7 +2,7 @@
   "name": "sinon-doublist-fs",
   "repo": "codeactual/sinon-doublist",
   "description": "node.js fs mixins for sinon-doublist",
-  "version": "0.4.7",
+  "version": "0.5.0",
   "keywords": [
     "sinon",
     "test",
@@ -18,9 +18,8 @@
     "component/bind": "9a55368",
     "visionmedia/configurable.js": "f87ca5f",
     "component/clone": "0.1.0",
-    "component/each": "8b1f645"
-  },
-  "development": {
+    "component/each": "8b1f645",
+    "codeactual/require-component": "0.1.1",
     "visionmedia/batch": "0.3.2"
   },
   "main": "lib/component/main.js",
