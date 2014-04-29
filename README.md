@@ -6,7 +6,7 @@ node.js `fs` mixins for [sinon-doublist](https://github.com/codeactual/sinon-dou
 
 ## Examples
 
->> All `sinon` sandboxes except fake timers will be created by the both mixin approaches below. ([sinon docs](http://sinonjs.org/docs/#sandbox))
+> All `sinon` sandboxes except fake timers will be created by the both mixin approaches below. ([sinon docs](http://sinonjs.org/docs/#sandbox))
 
 ### Mixin with auto-sandboxing (recommended)
 
