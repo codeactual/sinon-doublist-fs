@@ -10,7 +10,7 @@ module.exports = function(grunt) {
   if (this.learn('initConfig.harmony')) {
     config.test_co_fs = {
       options: this.learn('initConfig.shell.test_lib.options'),
-      command: 'mocha --harmony --colors --recursive --reporter spec test/lib/co-fs.js'
+      command: 'mocha --harmony --colors --recursive --reporter spec --require co-mocha test/lib/co-fs.js'
     };
   }
 

@@ -116,7 +116,7 @@ If a file stub does not exist for a given path, we fallback to the real `fs` met
 
 ## [co-fs](https://github.com/visionmedia/co-fs) compatibility
 
-`co-fs` wrappers just need to be added prior to `sinon-doublist-fs` stubbing. See [test/lib/co-fs.js](test/lib/co-fs.js).
+`co-fs` wrappers just need to be added **after** `sinon-doublist-fs` stubbing. See [test/lib/co-fs.js](test/lib/co-fs.js).
 
 ## Installation
 
