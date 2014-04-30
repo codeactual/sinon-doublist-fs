@@ -46,7 +46,8 @@
     "mocha": "^1.18.2",
     "node-component-grunt": "git://github.com/codeactual/node-component-grunt.git",
     "co-fs": "^1.2.0",
-    "co-mocha": "0.0.2"
+    "co-mocha": "0.0.2",
+    "semver": "^2.2.1"
   },
   "scripts": {
     "test": "grunt test"
