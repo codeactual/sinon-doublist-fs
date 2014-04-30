@@ -1,5 +1,8 @@
 /*jshint expr:true*/
-var T = require('../..');
+require('../..');
+require('../../hooks');
+var T = require('../../t');
+
 var fs = T.fs;
 var path = T.path;
 var should = T.should;

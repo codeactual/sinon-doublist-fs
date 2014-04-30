@@ -369,6 +369,6 @@
             return require("sinon-doublist-fs");
         });
     } else {
-        this["sinon-doublist-fs"] = require("sinon-doublist-fs");
+        this["sinonDoublistFs"] = require("sinon-doublist-fs");
     }
 })();

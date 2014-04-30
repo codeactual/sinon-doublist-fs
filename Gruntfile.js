@@ -7,5 +7,6 @@ module.exports = function(grunt) {
     .demand('initConfig.instanceName', 'sinonDoublistFs')
     .demand('initConfig.klassName', 'sinonDoublistFs')
     .loot('node-component-grunt')
+    .loot('./config/grunt')
     .attack();
 };

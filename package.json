@@ -44,7 +44,9 @@
     "grunt-horde": "^0.3.3",
     "grunt-shell": "^0.6.4",
     "mocha": "^1.18.2",
-    "node-component-grunt": "git://github.com/codeactual/node-component-grunt.git"
+    "node-component-grunt": "git://github.com/codeactual/node-component-grunt.git",
+    "co-fs": "^1.2.0",
+    "co-mocha": "0.0.2"
   },
   "scripts": {
     "test": "grunt test"

@@ -114,6 +114,10 @@ If a file stub does not exist for a given path, we fallback to the real `fs` met
 * `sinonDoublistFs.realFsFallback = 2`
   * Throw an `Error`, ex. `existsSync, no such file stub '/path/to/file'`
 
+## [co-fs](https://github.com/visionmedia/co-fs) compatibility
+
+`co-fs` wrappers just need to be added prior to `sinon-doublist-fs` stubbing. See [test/lib/co-fs.js](test/lib/co-fs.js).
+
 ## Installation
 
 ### [NPM](https://npmjs.org/package/sinon-doublist-fs)
