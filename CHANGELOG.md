@@ -1,3 +1,7 @@
+# 0.5.1
+
+- fix(fsFallback): Undefined due to typo
+
 # 0.5.0
 
 - fix(sinon-doublist): Upgrade peer dependency to `0.5.0` to no longer use fake timers by default
