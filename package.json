@@ -1,7 +1,7 @@
 {
   "name": "sinon-doublist-fs",
   "description": "node.js fs mixins for sinon-doublist",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "main": "index.js",
   "keywords": [
     "sinon",
@@ -41,7 +41,7 @@
     "grunt": "^0.4.4",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-uglify": "^0.4.0",
-    "grunt-horde": "^0.3.3",
+    "grunt-horde": "^0.3.4",
     "grunt-shell": "^0.6.4",
     "mocha": "^1.18.2",
     "node-component-grunt": "git://github.com/codeactual/node-component-grunt.git",

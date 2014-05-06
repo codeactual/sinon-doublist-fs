@@ -1,3 +1,7 @@
+# 0.5.2
+
+- chore(grunt-horde): Upgrade to 0.3.4
+
 # 0.5.1
 
 - fix(fsFallback): Undefined due to typo
