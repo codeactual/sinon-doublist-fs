@@ -1,7 +1,7 @@
 {
   "name": "sinon-doublist-fs",
   "description": "node.js fs mixins for sinon-doublist",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "main": "index.js",
   "keywords": [
     "sinon",
@@ -53,7 +53,8 @@
     "test": "grunt test"
   },
   "author": "David Smith <codeactual@gmail.com>",
-  "devdir-ci": {
-    "version": 1
-  }
+  "files": [
+    "index.js",
+    "lib"
+  ]
 }
