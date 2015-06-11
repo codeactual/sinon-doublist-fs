@@ -39,15 +39,12 @@
     "co-fs": "^1.2.0",
     "co-mocha": "0.0.2",
     "grunt": "^0.4.4",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-uglify": "^0.4.0",
     "grunt-eslint": "^14.0.0",
     "grunt-horde": "^0.3.4",
     "grunt-jsonlint": "^1.0.4",
     "grunt-shell": "^0.6.4",
     "mocha": "^1.18.2",
-    "node-component-grunt": "git://github.com/codeactual/node-component-grunt.git",
-    "semver": "^2.2.1"
+    "node-component-grunt": "git://github.com/codeactual/node-component-grunt.git"
   },
   "scripts": {
     "test": "grunt test"
