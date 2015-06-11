@@ -1,11 +1,9 @@
-module.exports = function(grunt) {
+module.exports = function exports() {
   'use strict';
 
-  var config = {};
+  let config = {};
 
-  if (this.learn('initConfig.harmony')) {
-    config.test = [this.learn('registerTask.test')[0].concat('shell:test_co_fs')];
-  }
+  config.test = [this.learn('registerTask.test')[0].concat('shell:test_co_fs')];
 
   return config;
 };

@@ -11,5 +11,4 @@ T.sinonDoublist = require('sinon-doublist');
 T.fs = require('fs');
 T.path = require('path');
 
-T.requireComponent = require('../lib/component/require');
-T.Batch = T.requireComponent('batch');
+T.Batch = require('batch');
