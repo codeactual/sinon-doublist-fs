@@ -35,15 +35,15 @@
   "devDependencies": {
     "apidox": "^0.3.6",
     "batch": "^0.5.2",
-    "chai": "^1.9.1",
+    "chai": "^3.0.0",
     "co-fs": "^1.2.0",
-    "co-mocha": "0.0.2",
+    "co-mocha": "^1.1.0",
     "grunt": "^0.4.4",
     "grunt-eslint": "^14.0.0",
-    "grunt-horde": "^0.3.4",
+    "grunt-horde": "^0.4.0",
     "grunt-jsonlint": "^1.0.4",
-    "grunt-shell": "^0.6.4",
-    "mocha": "^1.18.2",
+    "grunt-shell": "^1.1.2",
+    "mocha": "^2.2.5",
     "node-component-grunt": "git://github.com/codeactual/node-component-grunt.git"
   },
   "scripts": {
