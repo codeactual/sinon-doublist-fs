@@ -1,17 +1,20 @@
-/*jshint expr:true*/
+/* eslint func-names: 0 */
+
+'use strict';
+
 require('../..');
 require('../../hooks');
-var T = require('../../t');
+const T = require('../../t');
 
-var fs = T.fs;
-var should = T.should;
-var Batch = T.Batch;
+const fs = T.fs;
+const should = T.should;
+const Batch = T.Batch;
 
 describe('fs stub', function() {
   describe('#exists', function() {
     it('should detect stub', function(testDone) {
-      var self = this;
-      var batch = new Batch();
+      const self = this;
+      const batch = new Batch();
 
       batch.push(function(taskDone) {
         fs.exists(self.paths[0], function(exists) {
@@ -56,7 +59,7 @@ describe('fs stub', function() {
 
   describe('#writeFile', function() {
     it('should update fake file map', function(testDone) {
-      var self = this;
+      const self = this;
       this.stubFile(this.paths[0]).make();
       fs.writeFile(this.paths[0], this.strings[0], function(err) {
         should.equal(err, null);
@@ -76,8 +79,6 @@ describe('fs stub', function() {
 
   describe('#renameSync', function() {
     it('should copy readFile buffers', function() {
-      var src = this.stubFile(this.paths[0]).buffer('txt').make();
-      var dst = this.stubFile(this.paths[1]).make();
       fs.renameSync(this.paths[0], this.paths[1]);
       fs.readFileSync(this.paths[1]).toString().should.equal('txt');
     });
@@ -216,7 +217,7 @@ describe('fs stub', function() {
 
   describe('#unlink', function() {
     it('should remove stub', function(testDone) {
-      var self = this;
+      const self = this;
       this.stubFile(this.paths[0]).make();
       fs.unlink(this.paths[0], function(err) {
         should.equal(err, null);
@@ -252,6 +253,7 @@ describe('fs stub', function() {
     it('should trim leading slashes', function(testDone) {
       this.stubTree('/root/a/index.js');
       fs.readdir('/root/a/', function(err, readdir) {
+        should.equal(err, null);
         readdir.should.deep.equal(['index.js']);
         testDone();
       });
@@ -269,6 +271,7 @@ describe('fs stub', function() {
     it('should trim leading slashes', function(testDone) {
       this.stubTree('/root/a/index.js');
       fs.lstat('/root/a/', function(err, stats) {
+        should.equal(err, null);
         stats.isDirectory().should.equal(true);
         testDone();
       });
@@ -286,6 +289,7 @@ describe('fs stub', function() {
     it('should trim leading slashes', function(testDone) {
       this.stubTree('/root/a/index.js');
       fs.stat('/root/a/', function(err, stats) {
+        should.equal(err, null);
         stats.isDirectory().should.equal(true);
         testDone();
       });

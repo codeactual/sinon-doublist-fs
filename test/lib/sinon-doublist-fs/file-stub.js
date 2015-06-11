@@ -1,28 +1,31 @@
-/*jshint expr:true*/
+/* eslint func-names: 0, new-cap: 0 */
+
+'use strict';
+
 require('../..');
 require('../../hooks');
-var T = require('../../t');
+const T = require('../../t');
 
-var fs = T.fs;
-var path = T.path;
-var should = T.should;
+const fs = T.fs;
+const path = T.path;
+const should = T.should;
 
 describe('FileStub', function() {
   describe('#getFileStub', function() {
     it('should drop trailing slash', function() {
-      var actual = this.stubFile(this.paths[0]).make();
+      const actual = this.stubFile(this.paths[0]).make();
       this.getFileStub(this.paths[0] + '/').should.deep.equal(actual);
     });
   });
 
   describe('#stubTree', function() {
     it('should fill in missing intermediate dirs', function() {
-      var incomplete = [
+      const incomplete = [
         '/root',
         '/root/d1/d2/f1.js',
         '/root/d1/d2/d3/d4/f2.js'
       ];
-      var complete = [
+      const complete = [
         '/root',
         '/root/d1',
         '/root/d1/d2',
@@ -49,8 +52,8 @@ describe('FileStub', function() {
     });
 
     it('should accept a string', function() {
-      var incomplete = '/root/d1/f1.js';
-      var complete = ['/root', '/root/d1', '/root/d1/f1.js'];
+      const incomplete = '/root/d1/f1.js';
+      const complete = ['/root', '/root/d1', '/root/d1/f1.js'];
       this.stubTree(incomplete);
       complete.forEach(function(path) {
         fs.existsSync(path).should.equal(true);
@@ -64,14 +67,14 @@ describe('FileStub', function() {
     });
 
     it('should recognize trailing slash as empty dir', function() {
-      var dir = '/root/d1/d2';
+      const dir = '/root/d1/d2';
       this.stubTree([dir + '/']);
       fs.readdirSync(dir).should.deep.equal([]);
       fs.statSync(dir).isDirectory().should.equal(true);
     });
 
     it('should accept string argument', function() {
-      var dir = '/root/d1/d2';
+      const dir = '/root/d1/d2';
       this.stubTree(dir);
       this.getFileStub(dir).get('name').should.equal(dir);
       fs.existsSync(dir).should.equal(true);
@@ -88,12 +91,12 @@ describe('FileStub', function() {
     });
 
     it('should update stub map', function() {
-      var actual = this.stubFile(this.paths[0]).make();
+      const actual = this.stubFile(this.paths[0]).make();
       this.getFileStub(this.paths[0]).should.deep.equal(actual);
     });
 
     it('should not use trailing slash in stub map', function() {
-      var actual = this.stubFile(this.paths[0] + '/').make();
+      const actual = this.stubFile(this.paths[0] + '/').make();
       this.getFileStub(this.paths[0]).should.deep.equal(actual);
       fs.existsSync(this.paths[0]).should.equal(true);
       fs.existsSync(this.paths[0] + '/').should.equal(true);
@@ -133,7 +136,7 @@ describe('FileStub', function() {
     });
 
     it('should init parent name', function() {
-      var stub = this.stubFile(this.paths[0]).make();
+      const stub = this.stubFile(this.paths[0]).make();
       stub.get('parentName').should.equal(path.dirname(this.paths[0]));
     });
   });
@@ -163,7 +166,7 @@ describe('FileStub', function() {
     });
 
     it('should set readFile output', function(testDone) {
-      var self = this;
+      const self = this;
       this.stubFile(this.paths[0]).buffer(this.strings[0]).make();
       fs.readFile(this.paths[0], function(err, data) {
         T.should.equal(err, null);
@@ -180,7 +183,7 @@ describe('FileStub', function() {
 
   describe('#readdir', function() {
     it('should stub readdirSync when passed false', function() {
-      var self = this;
+      const self = this;
       this.stubFile(this.paths[0]).readdir(false).make();
       (function() {
         fs.readdirSync(self.paths[0]);
@@ -188,9 +191,9 @@ describe('FileStub', function() {
     });
 
     it('should stub readdir when passed false', function(testDone) {
-      var self = this;
+      const self = this;
       this.stubFile(this.paths[0]).readdir(false).make();
-      fs.readdir(self.paths[0], function(err, readdir) {
+      fs.readdir(self.paths[0], function(err) {
         err.should.be.instanceOf(Error);
         err.message.should.equal('ENOTDIR, not a directory ' + self.paths[0]);
         testDone();
@@ -199,34 +202,36 @@ describe('FileStub', function() {
 
     it('should stub isFile/isDirectory when passed false', function() {
       this.stubFile(this.paths[0]).make(); // Without paths.
-      var stats = fs.statSync(this.paths[0]);
+      const stats = fs.statSync(this.paths[0]);
       stats.isDirectory().should.equal(false);
       stats.isFile().should.equal(true);
     });
 
     it('should update readdir from path string', function(testDone) {
-      var expected = ['a'];
+      const expected = ['a'];
       this.stubFile(this.paths[0]).readdir(expected[0]).make();
       fs.readdirSync(this.paths[0]).should.deep.equal(expected);
       fs.readdir(this.paths[0], function(err, files) {
+        T.should.equal(err, null);
         files.should.deep.equal(expected);
         testDone();
       });
     });
 
     it('should update readdir from path string array', function(testDone) {
-      var expected = ['a', 'b'];
+      const expected = ['a', 'b'];
       this.stubFile(this.paths[0]).readdir(expected).make();
       fs.readdirSync(this.paths[0]).should.deep.equal(expected);
       fs.readdir(this.paths[0], function(err, files) {
+        T.should.equal(err, null);
         files.should.deep.equal(expected);
         testDone();
       });
     });
 
     it('should update readdir from FileStub array', function(testDone) {
-      var expected = ['a', 'b'];
-      var readdir = [
+      const expected = ['a', 'b'];
+      const readdir = [
         this.paths[0] + '/' + expected[0],
         this.paths[0] + '/' + expected[1]
       ];
@@ -236,6 +241,7 @@ describe('FileStub', function() {
       ]).make();
       fs.readdirSync(this.paths[0]).should.deep.equal(expected);
       fs.readdir(this.paths[0], function(err, files) {
+        T.should.equal(err, null);
         files.should.deep.equal(expected);
         testDone();
       });
@@ -247,8 +253,8 @@ describe('FileStub', function() {
     });
 
     it('should make stubs from FileStub array', function() {
-      var self = this;
-      var expected = [
+      const self = this;
+      const expected = [
         '/a',
         '/a/b',
         '/a/b2',
@@ -289,13 +295,13 @@ describe('FileStub', function() {
     });
 
     it('should update #existsSync result', function() {
-      var stub = this.stubFile(this.paths[0]).make();
+      const stub = this.stubFile(this.paths[0]).make();
       stub.unlink();
       fs.existsSync(this.paths[0]).should.equal(false);
     });
 
     it('should update #exists result', function(testDone) {
-      var stub = this.stubFile(this.paths[0]).make();
+      const stub = this.stubFile(this.paths[0]).make();
       stub.unlink();
       fs.exists(this.paths[0], function(exists) {
         exists.should.equal(false);
@@ -328,7 +334,7 @@ function assertDefaultsMatch(stats) {
   stats.size.should.equal(0);
   stats.blksize.should.equal(4096);
   stats.blocks.should.equal(0);
-  var time = 'Mon, 10 Oct 2011 23:24:11 GMT';
+  const time = 'Mon, 10 Oct 2011 23:24:11 GMT';
   stats.atime.should.equal(time);
   stats.mtime.should.equal(time);
   stats.ctime.should.equal(time);

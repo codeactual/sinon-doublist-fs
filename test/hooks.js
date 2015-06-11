@@ -1,11 +1,13 @@
-var T = require('./t');
+'use strict';
 
-beforeEach(function() {
+const T = require('./t');
+
+beforeEach(function beforeEachTest() {
   T.sinonDoublist(T.sinon, this);
   T.sinonDoublistFs(this);
 });
 
-afterEach(function() {
+afterEach(function afterEachTest() {
   this.restoreFs();
   this.sandbox.restore();
 });

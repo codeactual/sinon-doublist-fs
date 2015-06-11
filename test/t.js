@@ -1,7 +1,7 @@
-var T = module.exports = {};
+const T = module.exports = {};
 
 T.sinon = require('sinon');
-var chai = require('chai');
+const chai = require('chai');
 
 T.should = chai.should();
 chai.config.includeStack = true;
