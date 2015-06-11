@@ -79,6 +79,8 @@ describe('fs stub', function() {
 
   describe('#renameSync', function() {
     it('should copy readFile buffers', function() {
+      this.stubFile(this.paths[0]).buffer('txt').make();
+      this.stubFile(this.paths[1]).make();
       fs.renameSync(this.paths[0], this.paths[1]);
       fs.readFileSync(this.paths[1]).toString().should.equal('txt');
     });
